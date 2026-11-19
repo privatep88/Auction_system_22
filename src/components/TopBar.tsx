@@ -236,23 +236,23 @@ export const TopBar: React.FC<TopBarProps> = ({
       </div>
 
       {/* Main Single-Row Top Bar: Right Transparent SAAED Logo | Exact Center Period & Location Buttons | Left Actions & User */}
-      <div className="relative z-10 flex h-14 w-full items-center justify-between gap-2 px-3 sm:px-5 lg:grid lg:h-[66px] lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:gap-4 lg:px-6">
+      <div className="relative z-10 flex h-[50px] w-full items-center justify-between gap-2 px-3 sm:px-5 lg:grid lg:h-[54px] lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:gap-4 lg:px-6">
         {/* Right (RTL Start): Mobile Drawer Toggle + Transparent Official SAAED Logo (No White Background) */}
         <div className="flex shrink-0 items-center gap-2 sm:gap-3 lg:justify-self-start">
           <button
             type="button"
             onClick={onToggleMobileMenu}
             aria-label="فتح القائمة الجانبية"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/20 bg-white/10 text-white transition hover:bg-white/20 lg:hidden"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/20 bg-white/10 text-white transition hover:bg-white/20 lg:hidden"
           >
-            <Menu className="h-5 w-5" />
+            <Menu className="h-4.5 w-4.5" />
           </button>
 
           <button
             type="button"
             onClick={() => onNavigateTab('dashboard')}
             aria-label="الانتقال إلى لوحة المؤشرات الرئيسية – شركة ساعد"
-            className="group relative flex shrink-0 items-center rounded-md py-1 transition-opacity hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/80"
+            className="group relative flex shrink-0 items-center rounded-md py-0.5 transition-opacity hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/80"
           >
             {!logoFailed ? (
               <img
@@ -260,7 +260,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                 alt="شعار شركة ساعد SAAED"
                 referrerPolicy="no-referrer"
                 onError={() => setLogoFailed(true)}
-                className="h-9 w-auto max-w-[140px] object-contain drop-shadow-[0_2px_10px_rgba(2,14,36,0.7)] sm:h-10 sm:max-w-[168px] lg:h-[46px] lg:max-w-[196px]"
+                className="h-8 w-auto max-w-[132px] object-contain drop-shadow-[0_2px_10px_rgba(2,14,36,0.7)] sm:h-9 sm:max-w-[155px] lg:h-[40px] lg:max-w-[175px]"
               />
             ) : (
               <span className="text-base font-extrabold tracking-tight text-white">

@@ -75,36 +75,36 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
         </svg>
 
         {/* Interactive React Foreground Layer: Right Titles & Executive Icons + Bottom Action Bar */}
-        <div className="relative z-10 flex h-full min-h-[236px] flex-col justify-between px-4 py-3.5 sm:min-h-[248px] sm:px-6 lg:min-h-[262px] lg:px-7 lg:py-4 xl:min-h-[274px]">
+        <div className="relative z-10 flex h-full min-h-[184px] flex-col justify-between px-4 py-2.5 sm:min-h-[192px] sm:px-6 lg:min-h-[202px] lg:px-7 lg:py-3 xl:min-h-[212px] 2xl:min-h-[218px]">
           {/* Upper-Right Executive Title Block & 3 Feature Icons */}
           <div className="flex flex-1 items-center justify-start">
-            <div className="flex max-w-full flex-col items-start text-right lg:max-w-[46%] xl:max-w-[43%]">
+            <div className="flex max-w-full flex-col items-start text-right lg:max-w-[40%] xl:max-w-[38%]">
               <h1
-                className={`${styles.heroTitle} text-[17px] min-[480px]:text-[20px] sm:text-[22px] lg:text-[22px] xl:text-[25px] 2xl:text-[27px]`}
+                className={`${styles.heroTitle} text-[16px] min-[480px]:text-[18px] sm:text-[19.5px] lg:text-[19px] xl:text-[22px] 2xl:text-[24px]`}
               >
                 <span className="block">نظام التقرير المالي والتحليل التنفيذي</span>
                 <span className="block">لمزادات المركبات – شركة ساعد</span>
               </h1>
               <p
-                className={`${styles.heroSubtitle} mt-1 text-[10.5px] sm:text-[12px] xl:text-[13px]`}
+                className={`${styles.heroSubtitle} mt-0.5 text-[10px] sm:text-[11px] xl:text-[12px]`}
               >
                 SAAED Vehicle Auctions – Financial &amp; Executive Analytics System
               </p>
 
-              {/* 3 Executive Vector Icons below Subtitle (matching reference image) */}
+              {/* 3 Executive Vector Icons below Subtitle */}
               <div
                 aria-hidden="true"
-                className="mt-2.5 hidden items-center gap-4 text-white/95 sm:flex lg:mt-3"
+                className="mt-1.5 hidden items-center gap-3.5 text-white/95 sm:flex"
               >
-                <BarChart3 className="h-7 w-7 drop-shadow-[0_2px_6px_rgba(2,14,36,0.65)] xl:h-8 xl:w-8" />
-                <Gavel className="h-7 w-7 drop-shadow-[0_2px_6px_rgba(2,14,36,0.65)] xl:h-8 xl:w-8" />
-                <Car className="h-7 w-7 drop-shadow-[0_2px_6px_rgba(2,14,36,0.65)] xl:h-8 xl:w-8" />
+                <BarChart3 className="h-5.5 w-5.5 drop-shadow-[0_2px_6px_rgba(2,14,36,0.65)] xl:h-6 xl:w-6" />
+                <Gavel className="h-5.5 w-5.5 drop-shadow-[0_2px_6px_rgba(2,14,36,0.65)] xl:h-6 xl:w-6" />
+                <Car className="h-5.5 w-5.5 drop-shadow-[0_2px_6px_rgba(2,14,36,0.65)] xl:h-6 xl:w-6" />
               </div>
             </div>
           </div>
 
           {/* Bottom Action Controls Bar (RTL Order: + إضافة مزاد -> + إضافة مركبة -> استيراد Excel/CSV -> تقرير PDF/A4 -> 3 Glass Icon Shortcuts) */}
-          <div className="mt-3 flex flex-wrap items-center justify-start gap-2 sm:gap-2.5 lg:mt-0 lg:pl-[200px] xl:pl-[250px]">
+          <div className="mt-2 flex flex-wrap items-center justify-start gap-1.5 sm:gap-2 lg:mt-0 lg:pl-[185px] xl:pl-[225px]">
             {canEdit && (
               <>
                 <button

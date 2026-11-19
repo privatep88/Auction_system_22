@@ -88,8 +88,8 @@
 .filterPill {
   display: inline-flex;
   align-items: center;
-  height: 2.35rem;
-  border-radius: 0.625rem;
+  height: 2.1rem;
+  border-radius: 0.55rem;
   background: linear-gradient(180deg, #ffffff 0%, #f6f9fd 100%);
   color: #07244b;
   border: 1px solid rgba(255, 255, 255, 0.92);
