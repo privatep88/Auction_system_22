@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BarChart3, Car, FileSpreadsheet, Gavel, Plus, Upload } from 'lucide-react';
-import heroReferencePanoramic from '../assets/images/hero_saaed_reference_scene_1795113660162.jpg';
+import heroReferencePanoramic from '../assets/images/hero_saaed_dual_flags_v3_1795122279509.jpg';
 import { TabId } from '../types';
 import styles from './HeroBanner.module.css';
 
@@ -26,12 +26,12 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
   return (
     <section className={`no-print ${styles.heroRoot}`}>
       <div className={styles.heroStage}>
-        {/* Panoramic Scene Layer: Wooden Gavel & Brass Plaque (Left) + Luxury Car Rows + UAE Flag + SAAED Building (Center) */}
+        {/* Panoramic Scene Layer: Wooden Gavel & Brass Plaque (Left) + Luxury Car Rows + UAE Flag & SAAED Flag + SAAED Building (Center) */}
         <div aria-hidden="true" className={styles.scenicWrapper}>
           {!sceneFailed ? (
             <img
               src={heroReferencePanoramic}
-              alt="مبنى شركة ساعد وعلم الإمارات وساحة مزادات المركبات ومطرقة المزاد"
+              alt="مبنى شركة ساعد وعلم الإمارات وعلم شركة ساعد وساحة مزادات المركبات ومطرقة المزاد"
               referrerPolicy="no-referrer"
               onError={() => setSceneFailed(true)}
               className={styles.scenicImage}
