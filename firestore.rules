@@ -1,0 +1,343 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global safety net: deny all by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Hardened Primitives ---
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(uid) {
+      return isVerified() && request.auth.uid == uid;
+    }
+
+    function isBootstrappedAdmin() {
+      return isVerified() && request.auth.token.email == 'mr.aljefre@gmail.com';
+    }
+
+    function isAdmin() {
+      return isBootstrappedAdmin() || (
+        isVerified() && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // --- Entity Validation Helpers ---
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['uid', 'email', 'displayName', 'role', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'email', 'displayName', 'role', 'department', 'createdAt', 'updatedAt'])
+        && isValidId(data.uid)
+        && data.email is string && data.email.size() >= 3 && data.email.size() <= 254
+        && data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 120
+        && data.role in ['admin', 'finance', 'auditor', 'viewer']
+        && (!('department' in data) || (data.department is string && data.department.size() <= 120))
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidAuction(data) {
+      return data.keys().hasAll(['id', 'title', 'auctionCode', 'location', 'year', 'month', 'status', 'saaedSharePercent', 'thirdPartySharePercent', 'ownerId', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['id', 'title', 'auctionCode', 'location', 'year', 'month', 'auctionDate', 'status', 'saaedSharePercent', 'thirdPartySharePercent', 'notes', 'ownerId', 'createdAt', 'updatedAt'])
+        && isValidId(data.id)
+        && isValidId(data.ownerId)
+        && data.title is string && data.title.size() >= 1 && data.title.size() <= 200
+        && data.auctionCode is string && data.auctionCode.size() >= 1 && data.auctionCode.size() <= 64
+        && data.location is string && data.location.size() >= 1 && data.location.size() <= 120
+        && data.year is number && data.year >= 2000 && data.year <= 2100
+        && data.month is number && data.month >= 1 && data.month <= 12
+        && (!('auctionDate' in data) || (data.auctionDate is string && data.auctionDate.size() <= 32))
+        && data.status in ['draft', 'active', 'closed', 'approved']
+        && data.saaedSharePercent is number && data.saaedSharePercent >= 0 && data.saaedSharePercent <= 100
+        && data.thirdPartySharePercent is number && data.thirdPartySharePercent >= 0 && data.thirdPartySharePercent <= 100
+        && (data.saaedSharePercent + data.thirdPartySharePercent) <= 100.01
+        && (!('notes' in data) || (data.notes is string && data.notes.size() <= 1000))
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidVehicle(data) {
+      return data.keys().hasAll(['id', 'auctionId', 'lotNumber', 'make', 'model', 'modelYear', 'location', 'year', 'month', 'estimatedValue', 'salePrice', 'collectedAmount', 'status', 'platformFee', 'adminFee', 'forkliftFee', 'recoveryFee', 'ownerId', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['id', 'auctionId', 'lotNumber', 'make', 'model', 'modelYear', 'vin', 'location', 'year', 'month', 'estimatedValue', 'salePrice', 'collectedAmount', 'status', 'saleDate', 'platformFee', 'adminFee', 'forkliftFee', 'recoveryFee', 'buyerName', 'ownerId', 'createdAt', 'updatedAt'])
+        && isValidId(data.id)
+        && isValidId(data.auctionId)
+        && isValidId(data.ownerId)
+        && data.lotNumber is string && data.lotNumber.size() >= 1 && data.lotNumber.size() <= 64
+        && data.make is string && data.make.size() >= 1 && data.make.size() <= 80
+        && data.model is string && data.model.size() >= 1 && data.model.size() <= 80
+        && data.modelYear is number && data.modelYear >= 1950 && data.modelYear <= 2100
+        && (!('vin' in data) || (data.vin is string && data.vin.size() <= 64))
+        && data.location is string && data.location.size() >= 1 && data.location.size() <= 120
+        && data.year is number && data.year >= 2000 && data.year <= 2100
+        && data.month is number && data.month >= 1 && data.month <= 12
+        && data.estimatedValue is number && data.estimatedValue >= 0
+        && data.salePrice is number && data.salePrice >= 0
+        && data.collectedAmount is number && data.collectedAmount >= 0
+        && data.status in ['sold', 'unsold', 'pending']
+        && (!('saleDate' in data) || (data.saleDate is string && data.saleDate.size() <= 32))
+        && data.platformFee is number && data.platformFee >= 0
+        && data.adminFee is number && data.adminFee >= 0
+        && data.forkliftFee is number && data.forkliftFee >= 0
+        && data.recoveryFee is number && data.recoveryFee >= 0
+        && (!('buyerName' in data) || (data.buyerName is string && data.buyerName.size() <= 120))
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidCollectionRecord(data) {
+      return data.keys().hasAll(['id', 'auctionId', 'receiptNo', 'bidderName', 'amount', 'method', 'collectionDate', 'year', 'month', 'ownerId', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['id', 'auctionId', 'vehicleId', 'receiptNo', 'bidderName', 'amount', 'method', 'collectionDate', 'year', 'month', 'location', 'notes', 'ownerId', 'createdAt', 'updatedAt'])
+        && isValidId(data.id)
+        && isValidId(data.auctionId)
+        && isValidId(data.ownerId)
+        && (!('vehicleId' in data) || (data.vehicleId is string && data.vehicleId.size() <= 128))
+        && data.receiptNo is string && data.receiptNo.size() >= 1 && data.receiptNo.size() <= 64
+        && data.bidderName is string && data.bidderName.size() >= 1 && data.bidderName.size() <= 120
+        && data.amount is number && data.amount >= 0
+        && data.method in ['bank_transfer', 'cheque', 'card', 'cash']
+        && data.collectionDate is string && data.collectionDate.size() >= 1 && data.collectionDate.size() <= 32
+        && data.year is number && data.year >= 2000 && data.year <= 2100
+        && data.month is number && data.month >= 1 && data.month <= 12
+        && (!('location' in data) || (data.location is string && data.location.size() <= 120))
+        && (!('notes' in data) || (data.notes is string && data.notes.size() <= 500))
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidApprovedReport(data) {
+      return data.keys().hasAll(['id', 'title', 'periodType', 'year', 'month', 'totalVehicles', 'soldVehicles', 'totalEstimated', 'totalSale', 'totalCollected', 'saaedShareAmount', 'thirdPartyShareAmount', 'totalServices', 'approvedByName', 'status', 'ownerId', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['id', 'title', 'periodType', 'year', 'month', 'auctionId', 'location', 'totalVehicles', 'soldVehicles', 'totalEstimated', 'totalSale', 'totalCollected', 'saaedShareAmount', 'thirdPartyShareAmount', 'totalServices', 'approvedByName', 'status', 'notes', 'ownerId', 'createdAt', 'updatedAt'])
+        && isValidId(data.id)
+        && isValidId(data.ownerId)
+        && data.title is string && data.title.size() >= 1 && data.title.size() <= 200
+        && data.periodType in ['monthly', 'annual', 'auction']
+        && data.year is number && data.year >= 2000 && data.year <= 2100
+        && data.month is number && data.month >= 0 && data.month <= 12
+        && (!('auctionId' in data) || (data.auctionId is string && data.auctionId.size() <= 128))
+        && (!('location' in data) || (data.location is string && data.location.size() <= 120))
+        && data.totalVehicles is number && data.totalVehicles >= 0
+        && data.soldVehicles is number && data.soldVehicles >= 0
+        && data.totalEstimated is number && data.totalEstimated >= 0
+        && data.totalSale is number && data.totalSale >= 0
+        && data.totalCollected is number && data.totalCollected >= 0
+        && data.saaedShareAmount is number && data.saaedShareAmount >= 0
+        && data.thirdPartyShareAmount is number && data.thirdPartyShareAmount >= 0
+        && data.totalServices is number && data.totalServices >= 0
+        && data.approvedByName is string && data.approvedByName.size() >= 1 && data.approvedByName.size() <= 120
+        && data.status in ['approved', 'archived']
+        && (!('notes' in data) || (data.notes is string && data.notes.size() <= 1000))
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidAuditLog(data) {
+      return data.keys().hasAll(['id', 'entityType', 'entityId', 'action', 'summary', 'actorName', 'year', 'month', 'ownerId', 'createdAt'])
+        && data.keys().hasOnly(['id', 'entityType', 'entityId', 'action', 'summary', 'actorName', 'year', 'month', 'ownerId', 'createdAt'])
+        && isValidId(data.id)
+        && isValidId(data.ownerId)
+        && data.entityType is string && data.entityType.size() >= 1 && data.entityType.size() <= 64
+        && data.entityId is string && data.entityId.size() >= 1 && data.entityId.size() <= 128
+        && data.action is string && data.action.size() >= 1 && data.action.size() <= 64
+        && data.summary is string && data.summary.size() >= 1 && data.summary.size() <= 500
+        && data.actorName is string && data.actorName.size() >= 1 && data.actorName.size() <= 120
+        && data.year is number && data.year >= 2000 && data.year <= 2100
+        && data.month is number && data.month >= 1 && data.month <= 12
+        && data.createdAt is timestamp;
+    }
+
+    function isValidSystemSettings(data) {
+      return data.keys().hasAll(['id', 'defaultSaaedSharePercent', 'defaultThirdPartySharePercent', 'defaultPlatformFee', 'defaultAdminFee', 'defaultForkliftFee', 'defaultRecoveryFee', 'ownerId', 'updatedAt'])
+        && data.keys().hasOnly(['id', 'defaultSaaedSharePercent', 'defaultThirdPartySharePercent', 'defaultPlatformFee', 'defaultAdminFee', 'defaultForkliftFee', 'defaultRecoveryFee', 'ownerId', 'updatedAt'])
+        && isValidId(data.id)
+        && isValidId(data.ownerId)
+        && data.defaultSaaedSharePercent is number && data.defaultSaaedSharePercent >= 0 && data.defaultSaaedSharePercent <= 100
+        && data.defaultThirdPartySharePercent is number && data.defaultThirdPartySharePercent >= 0 && data.defaultThirdPartySharePercent <= 100
+        && data.defaultPlatformFee is number && data.defaultPlatformFee >= 0
+        && data.defaultAdminFee is number && data.defaultAdminFee >= 0
+        && data.defaultForkliftFee is number && data.defaultForkliftFee >= 0
+        && data.defaultRecoveryFee is number && data.defaultRecoveryFee >= 0
+        && data.updatedAt is timestamp;
+    }
+
+    // --- Collection Rules ---
+
+    match /admins/{adminId} {
+      allow get: if isValidId(adminId) && (isOwner(adminId) || isAdmin());
+      allow list: if false;
+      allow create, update, delete: if isValidId(adminId) && isBootstrappedAdmin();
+    }
+
+    match /users/{userId} {
+      allow get: if isValidId(userId) && (isOwner(userId) || isAdmin());
+      allow list: if isVerified() && (resource.data.uid == request.auth.uid || isBootstrappedAdmin());
+      allow create: if isValidId(userId)
+        && isOwner(userId)
+        && isValidUserProfile(incoming())
+        && incoming().uid == request.auth.uid
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time
+        && (incoming().role == 'finance' || isBootstrappedAdmin());
+      allow update: if isValidId(userId)
+        && isValidUserProfile(incoming())
+        && incoming().uid == existing().uid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (
+          isAdmin() ||
+          (isOwner(userId) && incoming().role == existing().role && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'department', 'updatedAt']))
+        );
+      allow delete: if isValidId(userId) && isAdmin();
+    }
+
+    match /auctions/{auctionId} {
+      allow get: if isValidId(auctionId) && isVerified() && (existing().ownerId == request.auth.uid || isAdmin());
+      allow list: if isVerified() && (resource.data.ownerId == request.auth.uid || isBootstrappedAdmin());
+      allow create: if isValidId(auctionId)
+        && isVerified()
+        && isValidAuction(incoming())
+        && incoming().id == auctionId
+        && incoming().ownerId == request.auth.uid
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(auctionId)
+        && isVerified()
+        && isValidAuction(incoming())
+        && incoming().id == existing().id
+        && incoming().ownerId == existing().ownerId
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (isAdmin() || (
+          existing().ownerId == request.auth.uid
+          && existing().status != 'approved'
+          && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'auctionCode', 'location', 'year', 'month', 'auctionDate', 'status', 'saaedSharePercent', 'thirdPartySharePercent', 'notes', 'updatedAt'])
+        ));
+      allow delete: if isValidId(auctionId) && isVerified() && (isAdmin() || (existing().ownerId == request.auth.uid && existing().status != 'approved'));
+    }
+
+    match /vehicles/{vehicleId} {
+      allow get: if isValidId(vehicleId) && isVerified() && (existing().ownerId == request.auth.uid || isAdmin());
+      allow list: if isVerified() && (resource.data.ownerId == request.auth.uid || isBootstrappedAdmin());
+      allow create: if isValidId(vehicleId)
+        && isVerified()
+        && isValidVehicle(incoming())
+        && incoming().id == vehicleId
+        && incoming().ownerId == request.auth.uid
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(vehicleId)
+        && isVerified()
+        && isValidVehicle(incoming())
+        && incoming().id == existing().id
+        && incoming().ownerId == existing().ownerId
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (isAdmin() || (
+          existing().ownerId == request.auth.uid
+          && incoming().diff(existing()).affectedKeys().hasOnly(['auctionId', 'lotNumber', 'make', 'model', 'modelYear', 'vin', 'location', 'year', 'month', 'estimatedValue', 'salePrice', 'collectedAmount', 'status', 'saleDate', 'platformFee', 'adminFee', 'forkliftFee', 'recoveryFee', 'buyerName', 'updatedAt'])
+        ));
+      allow delete: if isValidId(vehicleId) && isVerified() && (isAdmin() || existing().ownerId == request.auth.uid);
+    }
+
+    match /collections/{collectionId} {
+      allow get: if isValidId(collectionId) && isVerified() && (existing().ownerId == request.auth.uid || isAdmin());
+      allow list: if isVerified() && (resource.data.ownerId == request.auth.uid || isBootstrappedAdmin());
+      allow create: if isValidId(collectionId)
+        && isVerified()
+        && isValidCollectionRecord(incoming())
+        && incoming().id == collectionId
+        && incoming().ownerId == request.auth.uid
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(collectionId)
+        && isVerified()
+        && isValidCollectionRecord(incoming())
+        && incoming().id == existing().id
+        && incoming().ownerId == existing().ownerId
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (isAdmin() || (
+          existing().ownerId == request.auth.uid
+          && incoming().diff(existing()).affectedKeys().hasOnly(['auctionId', 'vehicleId', 'receiptNo', 'bidderName', 'amount', 'method', 'collectionDate', 'year', 'month', 'location', 'notes', 'updatedAt'])
+        ));
+      allow delete: if isValidId(collectionId) && isVerified() && (isAdmin() || existing().ownerId == request.auth.uid);
+    }
+
+    match /approvedReports/{reportId} {
+      allow get: if isValidId(reportId) && isVerified() && (existing().ownerId == request.auth.uid || isAdmin());
+      allow list: if isVerified() && (resource.data.ownerId == request.auth.uid || isBootstrappedAdmin());
+      allow create: if isValidId(reportId)
+        && isVerified()
+        && isValidApprovedReport(incoming())
+        && incoming().id == reportId
+        && incoming().ownerId == request.auth.uid
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(reportId)
+        && isVerified()
+        && isValidApprovedReport(incoming())
+        && incoming().id == existing().id
+        && incoming().ownerId == existing().ownerId
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (isAdmin() || (
+          existing().ownerId == request.auth.uid
+          && existing().status != 'archived'
+          && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'notes', 'updatedAt'])
+        ));
+      allow delete: if isValidId(reportId) && isAdmin();
+    }
+
+    match /auditLogs/{logId} {
+      allow get: if isValidId(logId) && isVerified() && (existing().ownerId == request.auth.uid || isAdmin());
+      allow list: if isVerified() && (resource.data.ownerId == request.auth.uid || isBootstrappedAdmin());
+      allow create: if isValidId(logId)
+        && isVerified()
+        && isValidAuditLog(incoming())
+        && incoming().id == logId
+        && incoming().ownerId == request.auth.uid
+        && incoming().createdAt == request.time;
+      allow update, delete: if false;
+    }
+
+    match /systemSettings/{settingId} {
+      allow get: if isValidId(settingId) && isVerified() && (existing().ownerId == request.auth.uid || isAdmin());
+      allow list: if isVerified() && (resource.data.ownerId == request.auth.uid || isBootstrappedAdmin());
+      allow create: if isValidId(settingId)
+        && isVerified()
+        && isValidSystemSettings(incoming())
+        && incoming().id == settingId
+        && incoming().ownerId == request.auth.uid
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(settingId)
+        && isVerified()
+        && isValidSystemSettings(incoming())
+        && incoming().id == existing().id
+        && incoming().ownerId == existing().ownerId
+        && incoming().updatedAt == request.time
+        && (isAdmin() || (
+          existing().ownerId == request.auth.uid
+          && incoming().diff(existing()).affectedKeys().hasOnly(['defaultSaaedSharePercent', 'defaultThirdPartySharePercent', 'defaultPlatformFee', 'defaultAdminFee', 'defaultForkliftFee', 'defaultRecoveryFee', 'updatedAt'])
+        ));
+      allow delete: if isValidId(settingId) && isAdmin();
+    }
+  }
+}

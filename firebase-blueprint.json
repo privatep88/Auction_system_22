@@ -1,0 +1,189 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "System user profile and role-based access control metadata",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "email": { "type": "string", "format": "email", "maxLength": 254 },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "role": { "type": "string", "enum": ["admin", "finance", "auditor", "viewer"] },
+        "department": { "type": "string", "maxLength": 120 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "displayName", "role", "createdAt", "updatedAt"]
+    },
+    "Auction": {
+      "title": "Auction",
+      "description": "Vehicle auction session with period isolation and revenue share settings",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "auctionCode": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "location": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "year": { "type": "number" },
+        "month": { "type": "number" },
+        "auctionDate": { "type": "string", "maxLength": 32 },
+        "status": { "type": "string", "enum": ["draft", "active", "closed", "approved"] },
+        "saaedSharePercent": { "type": "number" },
+        "thirdPartySharePercent": { "type": "number" },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "auctionCode", "location", "year", "month", "status", "saaedSharePercent", "thirdPartySharePercent", "ownerId", "createdAt", "updatedAt"]
+    },
+    "Vehicle": {
+      "title": "Vehicle",
+      "description": "Displayed or sold vehicle in an auction with valuation, sale price, collections, and service fees",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "auctionId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "lotNumber": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "make": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "model": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "modelYear": { "type": "number" },
+        "vin": { "type": "string", "maxLength": 64 },
+        "location": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "year": { "type": "number" },
+        "month": { "type": "number" },
+        "estimatedValue": { "type": "number" },
+        "salePrice": { "type": "number" },
+        "collectedAmount": { "type": "number" },
+        "status": { "type": "string", "enum": ["sold", "unsold", "pending"] },
+        "saleDate": { "type": "string", "maxLength": 32 },
+        "platformFee": { "type": "number" },
+        "adminFee": { "type": "number" },
+        "forkliftFee": { "type": "number" },
+        "recoveryFee": { "type": "number" },
+        "buyerName": { "type": "string", "maxLength": 120 },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "auctionId", "lotNumber", "make", "model", "modelYear", "location", "year", "month", "estimatedValue", "salePrice", "collectedAmount", "status", "platformFee", "adminFee", "forkliftFee", "recoveryFee", "ownerId", "createdAt", "updatedAt"]
+    },
+    "CollectionRecord": {
+      "title": "CollectionRecord",
+      "description": "Financial collection receipt from bidders",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "auctionId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "vehicleId": { "type": "string", "maxLength": 128 },
+        "receiptNo": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "bidderName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "amount": { "type": "number" },
+        "method": { "type": "string", "enum": ["bank_transfer", "cheque", "card", "cash"] },
+        "collectionDate": { "type": "string", "maxLength": 32 },
+        "year": { "type": "number" },
+        "month": { "type": "number" },
+        "location": { "type": "string", "maxLength": 120 },
+        "notes": { "type": "string", "maxLength": 500 },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "auctionId", "receiptNo", "bidderName", "amount", "method", "collectionDate", "year", "month", "ownerId", "createdAt", "updatedAt"]
+    },
+    "ApprovedReport": {
+      "title": "ApprovedReport",
+      "description": "Archived and approved executive financial report snapshot",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "periodType": { "type": "string", "enum": ["monthly", "annual", "auction"] },
+        "year": { "type": "number" },
+        "month": { "type": "number" },
+        "auctionId": { "type": "string", "maxLength": 128 },
+        "location": { "type": "string", "maxLength": 120 },
+        "totalVehicles": { "type": "number" },
+        "soldVehicles": { "type": "number" },
+        "totalEstimated": { "type": "number" },
+        "totalSale": { "type": "number" },
+        "totalCollected": { "type": "number" },
+        "saaedShareAmount": { "type": "number" },
+        "thirdPartyShareAmount": { "type": "number" },
+        "totalServices": { "type": "number" },
+        "approvedByName": { "type": "string", "maxLength": 120 },
+        "status": { "type": "string", "enum": ["approved", "archived"] },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "periodType", "year", "month", "totalVehicles", "soldVehicles", "totalEstimated", "totalSale", "totalCollected", "saaedShareAmount", "thirdPartyShareAmount", "totalServices", "approvedByName", "status", "ownerId", "createdAt", "updatedAt"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Immutable chronological log of modifications and approvals",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "entityType": { "type": "string", "maxLength": 64 },
+        "entityId": { "type": "string", "maxLength": 128 },
+        "action": { "type": "string", "maxLength": 64 },
+        "summary": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "actorName": { "type": "string", "maxLength": 120 },
+        "year": { "type": "number" },
+        "month": { "type": "number" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "entityType", "entityId", "action", "summary", "actorName", "year", "month", "ownerId", "createdAt"]
+    },
+    "SystemSettings": {
+      "title": "SystemSettings",
+      "description": "Organization financial defaults and yard configurations",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "defaultSaaedSharePercent": { "type": "number" },
+        "defaultThirdPartySharePercent": { "type": "number" },
+        "defaultPlatformFee": { "type": "number" },
+        "defaultAdminFee": { "type": "number" },
+        "defaultForkliftFee": { "type": "number" },
+        "defaultRecoveryFee": { "type": "number" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "defaultSaaedSharePercent", "defaultThirdPartySharePercent", "defaultPlatformFee", "defaultAdminFee", "defaultForkliftFee", "defaultRecoveryFee", "ownerId", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User profile and role assignment"
+    },
+    "/auctions/{auctionId}": {
+      "schema": { "$ref": "#/entities/Auction" },
+      "description": "Auction sessions"
+    },
+    "/vehicles/{vehicleId}": {
+      "schema": { "$ref": "#/entities/Vehicle" },
+      "description": "Vehicles displayed and sold in auctions"
+    },
+    "/collections/{collectionId}": {
+      "schema": { "$ref": "#/entities/CollectionRecord" },
+      "description": "Bidder financial collection receipts"
+    },
+    "/approvedReports/{reportId}": {
+      "schema": { "$ref": "#/entities/ApprovedReport" },
+      "description": "Approved executive financial reports archive"
+    },
+    "/auditLogs/{logId}": {
+      "schema": { "$ref": "#/entities/AuditLog" },
+      "description": "Immutable audit trail of system modifications and approvals"
+    },
+    "/systemSettings/{settingId}": {
+      "schema": { "$ref": "#/entities/SystemSettings" },
+      "description": "Per-workspace financial default settings"
+    }
+  }
+}
