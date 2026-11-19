@@ -13,8 +13,8 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: true
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -55,20 +55,25 @@ jobs:
         run: |
           RAW_BASE="${{ steps.pages.outputs.base_path }}"
           ORIGIN="${{ steps.pages.outputs.origin }}"
-          if [[ -n "$RAW_BASE" ]]; then
+          BASE_URL="${{ steps.pages.outputs.base_url }}"
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+
+          if [[ -n "$RAW_BASE" && "$RAW_BASE" != "/" ]]; then
             NORMALIZED="/${RAW_BASE#/}"
             NORMALIZED="${NORMALIZED%/}/"
             echo "base_path=${NORMALIZED}" >> "$GITHUB_OUTPUT"
-          elif [[ -n "$ORIGIN" ]]; then
-            # Custom domain or <owner>.github.io root Pages site
+          elif [[ -n "$BASE_URL" && -n "$ORIGIN" && "${BASE_URL#"$ORIGIN"}" != "" && "${BASE_URL#"$ORIGIN"}" != "/" ]]; then
+            EXTRACTED="${BASE_URL#"$ORIGIN"}"
+            NORMALIZED="/${EXTRACTED#/}"
+            NORMALIZED="${NORMALIZED%/}/"
+            echo "base_path=${NORMALIZED}" >> "$GITHUB_OUTPUT"
+          elif [[ -n "$ORIGIN" && "$ORIGIN" != *.github.io && "$ORIGIN" != *.github.io:* ]]; then
+            # Verified custom domain configured on GitHub Pages
+            echo "base_path=/" >> "$GITHUB_OUTPUT"
+          elif [[ "$REPO_NAME" == *.github.io ]]; then
             echo "base_path=/" >> "$GITHUB_OUTPUT"
           else
-            REPO_NAME="${GITHUB_REPOSITORY#*/}"
-            if [[ "$REPO_NAME" == *.github.io ]]; then
-              echo "base_path=/" >> "$GITHUB_OUTPUT"
-            else
-              echo "base_path=/${REPO_NAME}/" >> "$GITHUB_OUTPUT"
-            fi
+            echo "base_path=/${REPO_NAME}/" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Build production bundle
@@ -99,8 +104,13 @@ jobs:
             echo "ERROR: Uncompiled source entry reference found in dist HTML"
             exit 1
           fi
-          if ! grep -q "${EXPECTED_BASE}assets/index-" dist/index.html; then
-            echo "ERROR: Built Vite entry script with base '${EXPECTED_BASE}' missing from dist/index.html"
+          if ! grep -qE "${EXPECTED_BASE}assets/index-[^\"]+\.js" dist/index.html; then
+            echo "ERROR: Built Vite JS entry with base '${EXPECTED_BASE}' missing from dist/index.html"
+            cat dist/index.html
+            exit 1
+          fi
+          if ! grep -qE "${EXPECTED_BASE}assets/index-[^\"]+\.css" dist/index.html; then
+            echo "ERROR: Built Vite CSS bundle with base '${EXPECTED_BASE}' missing from dist/index.html"
             cat dist/index.html
             exit 1
           fi
