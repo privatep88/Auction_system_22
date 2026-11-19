@@ -45,6 +45,39 @@ jobs:
       - name: Run 18-point financial & operational integrity suite
         run: npm test
 
+      - name: Guard against forbidden Pages workflow settings
+        shell: bash
+        run: |
+          node -e '
+            const fs = require("node:fs");
+            const path = require("node:path");
+            const dir = ".github/workflows";
+            const files = fs.readdirSync(dir).filter((f) => /\.ya?ml$/i.test(f));
+            for (const file of files) {
+              const full = path.join(dir, file);
+              const lines = fs.readFileSync(full, "utf8").split(/\r?\n/);
+              let concurrencyCount = 0;
+              lines.forEach((line, idx) => {
+                if (/^\s*enablement\s*:\s*true\b/i.test(line)) {
+                  console.error(`ERROR: Forbidden "enablement: true" directive found in ${full}:${idx + 1}. Remove it and enable GitHub Pages manually in Settings -> Pages -> Source: GitHub Actions.`);
+                  process.exit(1);
+                }
+                if (/^\s*continue-on-error\s*:\s*true\b/i.test(line)) {
+                  console.error(`ERROR: Forbidden "continue-on-error: true" directive found in ${full}:${idx + 1}. Do not silence Pages configuration failures.`);
+                  process.exit(1);
+                }
+                if (/^concurrency\s*:/i.test(line)) {
+                  concurrencyCount += 1;
+                }
+              });
+              if (concurrencyCount > 1) {
+                console.error(`ERROR: Duplicate top-level "concurrency:" definitions (${concurrencyCount}) found in ${full}.`);
+                process.exit(1);
+              }
+            }
+            console.log("Workflow guard passed for:", files.join(", "));
+          '
+
       - name: Configure GitHub Pages
         id: pages
         uses: actions/configure-pages@v5
