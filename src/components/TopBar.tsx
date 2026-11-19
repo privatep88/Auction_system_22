@@ -7,7 +7,6 @@ import {
   ChevronDown,
   Cloud,
   CloudOff,
-  FileDown,
   LogIn,
   LogOut,
   MapPin,
@@ -47,7 +46,7 @@ interface TopBarProps {
   onSignIn: () => void;
   onSignOut: () => void;
   onSyncLocal: () => void;
-  onOpenPrintPreview: () => void;
+  onOpenPrintPreview?: () => void;
   onToggleMobileMenu: () => void;
   notifications: NotificationItem[];
   onDismissNotification: (id: string) => void;
@@ -74,7 +73,6 @@ export const TopBar: React.FC<TopBarProps> = ({
   onSignIn,
   onSignOut,
   onSyncLocal,
-  onOpenPrintPreview,
   onToggleMobileMenu,
   notifications,
   onDismissNotification,
@@ -234,56 +232,18 @@ export const TopBar: React.FC<TopBarProps> = ({
             fill="url(#saaedTopWaveB)"
           />
         </svg>
+        <div className={styles.logoAmbientGlow} />
       </div>
 
-      {/* Main Single-Row Top Bar */}
-      <div className="relative z-10 flex h-14 w-full items-center justify-between gap-2 lg:h-[66px]">
-        {/* Far Right (RTL Start): Desktop 264px White Angled SAAED Logo Panel aligned with Sidebar */}
-        <div className={`${styles.brandPanelDesktop} hidden lg:flex`}>
-          <div aria-hidden="true" className={styles.brandPanelFill} />
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 22 66"
-            preserveAspectRatio="none"
-            className={styles.brandPanelChevronSvg}
-          >
-            <path
-              d="M18 0 L2 33 L18 66"
-              fill="none"
-              stroke="#D81E2A"
-              strokeWidth="4.5"
-              strokeLinejoin="miter"
-            />
-          </svg>
-          <button
-            type="button"
-            onClick={() => onNavigateTab('dashboard')}
-            aria-label="الانتقال إلى لوحة المؤشرات الرئيسية – شركة ساعد"
-            className="relative z-10 flex items-center justify-center rounded-md px-2 py-1 transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0B4F93]"
-          >
-            {!logoFailed ? (
-              <img
-                src={logoSrc}
-                alt="شعار شركة ساعد SAAED"
-                referrerPolicy="no-referrer"
-                onError={() => setLogoFailed(true)}
-                className="h-[46px] w-auto max-w-[192px] object-contain"
-              />
-            ) : (
-              <span className="text-lg font-extrabold tracking-tight text-[#0A2C52]">
-                SAAED <span className="text-[#C8232C]">ساعد</span>
-              </span>
-            )}
-          </button>
-        </div>
-
-        {/* Mobile/Tablet Right Start: Drawer Menu Toggle + Compact White SAAED Logo Badge */}
-        <div className="flex shrink-0 items-center gap-2 pr-3 sm:pr-4 lg:hidden">
+      {/* Main Single-Row Top Bar: Right Transparent SAAED Logo | Exact Center Period & Location Buttons | Left Actions & User */}
+      <div className="relative z-10 flex h-14 w-full items-center justify-between gap-2 px-3 sm:px-5 lg:grid lg:h-[66px] lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:gap-4 lg:px-6">
+        {/* Right (RTL Start): Mobile Drawer Toggle + Transparent Official SAAED Logo (No White Background) */}
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3 lg:justify-self-start">
           <button
             type="button"
             onClick={onToggleMobileMenu}
             aria-label="فتح القائمة الجانبية"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/20 bg-white/10 text-white transition hover:bg-white/20"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/20 bg-white/10 text-white transition hover:bg-white/20 lg:hidden"
           >
             <Menu className="h-5 w-5" />
           </button>
@@ -292,7 +252,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             type="button"
             onClick={() => onNavigateTab('dashboard')}
             aria-label="الانتقال إلى لوحة المؤشرات الرئيسية – شركة ساعد"
-            className={`${styles.brandPanelMobile} transition-opacity hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400`}
+            className="group relative flex shrink-0 items-center rounded-md py-1 transition-opacity hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/80"
           >
             {!logoFailed ? (
               <img
@@ -300,46 +260,24 @@ export const TopBar: React.FC<TopBarProps> = ({
                 alt="شعار شركة ساعد SAAED"
                 referrerPolicy="no-referrer"
                 onError={() => setLogoFailed(true)}
-                className="h-7 w-auto max-w-[116px] object-contain sm:h-8 sm:max-w-[136px]"
+                className="h-9 w-auto max-w-[140px] object-contain drop-shadow-[0_2px_10px_rgba(2,14,36,0.7)] sm:h-10 sm:max-w-[168px] lg:h-[46px] lg:max-w-[196px]"
               />
             ) : (
-              <span className="text-sm font-extrabold tracking-tight text-[#0A2C52]">
-                SAAED <span className="text-[#C8232C]">ساعد</span>
+              <span className="text-base font-extrabold tracking-tight text-white">
+                SAAED <span className="text-rose-400">ساعد</span>
               </span>
             )}
           </button>
         </div>
 
-        {/* Main Navy Header Controls Container (spans left of the 264px logo panel on desktop) */}
-        <div className="flex min-w-0 flex-1 items-center justify-between gap-2 pl-3 pr-2 sm:pl-5 lg:pl-6 lg:pr-7">
-          {/* Center-Right: Quick Period & Location White Cards (Desktop & Tablet Single Row) */}
-          <div className="hidden min-w-0 items-center gap-2.5 md:flex lg:gap-3">
-            {renderPeriodFilterPill(false)}
-            {renderLocationFilterPill(false)}
-          </div>
+        {/* Exact Center of Top Bar: Period ("نوفمبر 2026") & Locations ("جميع المواقع والساحات") */}
+        <div className="hidden min-w-0 items-center justify-center gap-2.5 md:mx-auto md:flex lg:mx-0 lg:justify-self-center lg:gap-3">
+          {renderPeriodFilterPill(false)}
+          {renderLocationFilterPill(false)}
+        </div>
 
-          {/* Left Cluster (RTL End): Export PDF, Sync, Notifications Bell & User Profile */}
-          <div className="mr-auto flex shrink-0 items-center gap-2 sm:gap-3 md:mr-0 lg:gap-3.5">
-            <button
-              type="button"
-              onClick={onOpenPrintPreview}
-              className={`${styles.pdfPillBtn} hidden sm:inline-flex`}
-              title="معاينة وتصدير التقرير المالي بصيغة A4"
-            >
-              <span>تصدير PDF</span>
-              <FileDown className="h-4 w-4 text-sky-300" />
-            </button>
-
-            <button
-              type="button"
-              onClick={onOpenPrintPreview}
-              aria-label="تصدير PDF"
-              title="معاينة وتصدير التقرير المالي بصيغة A4"
-              className={`${styles.circleIconBtn} sm:hidden`}
-            >
-              <FileDown className="h-4 w-4 text-sky-200" />
-            </button>
-
+        {/* Left Cluster (RTL End): Sync, Notifications Bell & User Profile */}
+        <div className="flex shrink-0 items-center justify-end gap-2 sm:gap-3 lg:justify-self-end lg:gap-3.5">
             {hasUnsyncedLocalData && (
               <button
                 type="button"
@@ -558,7 +496,6 @@ export const TopBar: React.FC<TopBarProps> = ({
             </div>
           </div>
         </div>
-      </div>
 
       {/* Responsive Mobile/Small-Tablet Filter Strip (shown only below md so filters stay reachable on all viewports) */}
       <div className="relative z-10 grid grid-cols-2 gap-2 border-t border-sky-400/20 px-3 py-2 md:hidden">
