@@ -13,8 +13,8 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -42,20 +42,28 @@ jobs:
       - name: TypeScript typecheck
         run: npm run lint
 
-      - name: Run 17-point financial & Excel validation suite
+      - name: Run 18-point financial & operational integrity suite
         run: npm test
 
-      - name: Configure GitHub Pages metadata
+      - name: Configure GitHub Pages
         id: pages
         uses: actions/configure-pages@v5
-        continue-on-error: true
+        with:
+          enablement: true
 
       - name: Resolve GitHub Pages base path
         id: pages_config
         shell: bash
         run: |
-          if [[ -n "${{ steps.pages.outputs.base_path }}" ]]; then
-            echo "base_path=${{ steps.pages.outputs.base_path }}" >> "$GITHUB_OUTPUT"
+          RAW_BASE="${{ steps.pages.outputs.base_path }}"
+          ORIGIN="${{ steps.pages.outputs.origin }}"
+          if [[ -n "$RAW_BASE" ]]; then
+            NORMALIZED="/${RAW_BASE#/}"
+            NORMALIZED="${NORMALIZED%/}/"
+            echo "base_path=${NORMALIZED}" >> "$GITHUB_OUTPUT"
+          elif [[ -n "$ORIGIN" ]]; then
+            # Custom domain or <owner>.github.io root Pages site
+            echo "base_path=/" >> "$GITHUB_OUTPUT"
           else
             REPO_NAME="${GITHUB_REPOSITORY#*/}"
             if [[ "$REPO_NAME" == *.github.io ]]; then
@@ -79,8 +87,11 @@ jobs:
         run: npm run build
 
       - name: Verify production bundle integrity
+        env:
+          EXPECTED_BASE: ${{ steps.pages_config.outputs.base_path }}
         shell: bash
         run: |
+          echo "Verified VITE_BASE_PATH=${EXPECTED_BASE}"
           test -f dist/index.html
           test -f dist/404.html
           test -f dist/.nojekyll
@@ -90,8 +101,9 @@ jobs:
             echo "ERROR: Uncompiled source entry reference found in dist HTML"
             exit 1
           fi
-          if ! grep -q "assets/index-" dist/index.html; then
-            echo "ERROR: Built Vite entry script missing from dist/index.html"
+          if ! grep -q "${EXPECTED_BASE}assets/index-" dist/index.html; then
+            echo "ERROR: Built Vite entry script with base '${EXPECTED_BASE}' missing from dist/index.html"
+            cat dist/index.html
             exit 1
           fi
           ls -lh dist dist/assets
