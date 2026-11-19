@@ -48,8 +48,6 @@ jobs:
       - name: Configure GitHub Pages
         id: pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - name: Resolve GitHub Pages base path
         id: pages_config
