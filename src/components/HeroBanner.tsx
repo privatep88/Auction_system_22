@@ -76,24 +76,29 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
 
         {/* Interactive React Foreground Layer: Right Titles & Executive Icons + Bottom Action Bar */}
         <div className="relative z-10 flex h-full min-h-[184px] flex-col justify-between px-4 py-2.5 sm:min-h-[192px] sm:px-6 lg:min-h-[202px] lg:px-7 lg:py-3 xl:min-h-[212px] 2xl:min-h-[218px]">
-          {/* Middle-Right Executive Title & Subtitle Block (Vertically Centered, Right-Aligned, Single-Line Arabic Headline) */}
-          <div className="flex flex-1 flex-col justify-center">
-            <div className="flex max-w-full flex-col items-start text-right">
+          {/* Middle-Right Executive Title Block: Centered Company Name & English Subtitle under Main Title */}
+          <div className="flex flex-1 flex-col items-start justify-center">
+            <div className="inline-flex w-fit max-w-full flex-col items-center text-center">
               <h1
-                className={`${styles.heroTitle} whitespace-nowrap text-[9px] min-[400px]:text-[10px] min-[480px]:text-[12px] sm:text-[15px] md:text-[17.5px] lg:text-[17.5px] xl:text-[21.5px] 2xl:text-[25px]`}
+                className={`${styles.heroTitle} flex flex-col items-center text-center`}
               >
-                نظام التقرير المالي والتحليل التنفيذي لمزادات المركبات – شركة ساعد للأنظمة المرورية
+                <span className="whitespace-nowrap text-[12px] min-[400px]:text-[13px] min-[480px]:text-[15px] sm:text-[17px] md:text-[19px] lg:text-[18px] xl:text-[21px] 2xl:text-[24px]">
+                  نظام التقرير المالي والتحليل التنفيذي لمزادات المركبات
+                </span>
+                <span className="mt-0.5 whitespace-nowrap text-[11px] text-sky-100 min-[400px]:text-[12px] min-[480px]:text-[13.5px] sm:text-[15.5px] md:text-[17px] lg:text-[16.5px] xl:text-[18.5px] 2xl:text-[21px]">
+                  شركة ساعد للأنظمة المرورية
+                </span>
               </h1>
               <p
-                className={`${styles.heroSubtitle} mt-1.5 text-[10.5px] sm:text-[12.5px] md:text-[13.5px] lg:text-[13.5px] xl:text-[15px] 2xl:text-[16.5px]`}
+                className={`${styles.heroSubtitle} mt-1 whitespace-nowrap text-[8.5px] min-[400px]:text-[9.5px] min-[480px]:text-[10.5px] sm:text-[11.5px] md:text-[12.5px] lg:text-[11.5px] xl:text-[13px] 2xl:text-[14.5px]`}
               >
                 SAAED Vehicle Auctions – Financial &amp; Executive Analytics System
               </p>
 
-              {/* 3 Executive Vector Icons below Subtitle (Right-Aligned) */}
+              {/* 3 Executive Vector Icons centered below Subtitle */}
               <div
                 aria-hidden="true"
-                className="mt-2 hidden items-center gap-3.5 text-white/95 sm:flex"
+                className="mt-1.5 hidden items-center justify-center gap-3.5 text-white/95 sm:flex"
               >
                 <BarChart3 className="h-5 w-5 drop-shadow-[0_2px_6px_rgba(2,14,36,0.65)] xl:h-5.5 xl:w-5.5" />
                 <Gavel className="h-5 w-5 drop-shadow-[0_2px_6px_rgba(2,14,36,0.65)] xl:h-5.5 xl:w-5.5" />
