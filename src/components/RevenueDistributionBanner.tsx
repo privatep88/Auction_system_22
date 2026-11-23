@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import revenueBannerImg from '../assets/images/revenue_share_seamless_1794567164146.jpg';
-import { assetUrl, formatNumber, formatPercent } from '../utils/uaeDate';
+import { BRAND_CONFIG, getBrandLogoUrl } from '../config/brand';
+import { formatNumber, formatPercent } from '../utils/uaeDate';
 import styles from './SaaedBanner.module.css';
 
 interface RevenueDistributionBannerProps {
@@ -17,7 +18,7 @@ export const RevenueDistributionBanner: React.FC<RevenueDistributionBannerProps>
   const [bannerFailed, setBannerFailed] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
 
-  const logoSrc = assetUrl('assets/aistudio/logo_1afd1154.png');
+  const logoSrc = getBrandLogoUrl();
   const safeSaaedPct = Math.min(100, Math.max(0, saaedSharePercent));
   const safeThirdPct = Math.min(100, Math.max(0, thirdPartySharePercent));
 
@@ -111,7 +112,7 @@ export const RevenueDistributionBanner: React.FC<RevenueDistributionBannerProps>
               <div className={styles.logoPlate}>
                 <img
                   src={logoSrc}
-                  alt="شعار شركة ساعد SAAED"
+                  alt={BRAND_CONFIG.logoAlt}
                   referrerPolicy="no-referrer"
                   onError={() => setLogoFailed(true)}
                   className={styles.logoImg}
@@ -123,7 +124,7 @@ export const RevenueDistributionBanner: React.FC<RevenueDistributionBannerProps>
                 توزيع نسب الإيرادات والشراكة المالية للمزادات
               </h3>
               <p className={styles.englishSubtitle}>
-                SAAED &amp; Third-Party Auction Revenue Share Distribution
+                {BRAND_CONFIG.nameEn} &amp; Third-Party Auction Revenue Share Distribution
               </p>
             </div>
           </div>
@@ -131,7 +132,7 @@ export const RevenueDistributionBanner: React.FC<RevenueDistributionBannerProps>
           <div className={styles.metricsRow}>
             <span className="inline-flex items-center gap-1.5">
               <span aria-hidden="true" className="h-2 w-2 rounded-xs bg-sky-400" />
-              حصة ساعد:{' '}
+              حصة {BRAND_CONFIG.nameAr}:{' '}
               <strong className="font-mono-num tabular-nums text-sky-200">
                 {formatPercent(safeSaaedPct, 2)}
               </strong>

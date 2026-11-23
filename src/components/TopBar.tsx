@@ -17,10 +17,10 @@ import {
 } from 'lucide-react';
 import { User } from 'firebase/auth';
 import { FilterState, TabId, UserRole } from '../types';
+import { BRAND_CONFIG, getBrandLogoUrl } from '../config/brand';
 import {
   ARABIC_MONTHS,
   UAE_LOCATIONS,
-  assetUrl,
   getMonthLabel,
   getUaeCurrentDate,
 } from '../utils/uaeDate';
@@ -86,7 +86,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   const notifRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
-  const logoSrc = assetUrl('assets/aistudio/logo_1afd1154.png');
+  const logoSrc = getBrandLogoUrl();
 
   const quickYears = useMemo(() => {
     const currentYear = getUaeCurrentDate().year;
@@ -251,20 +251,20 @@ export const TopBar: React.FC<TopBarProps> = ({
           <button
             type="button"
             onClick={() => onNavigateTab('dashboard')}
-            aria-label="الانتقال إلى لوحة المؤشرات الرئيسية – شركة ساعد"
+            aria-label={`الانتقال إلى لوحة المؤشرات الرئيسية – ${BRAND_CONFIG.companyNameAr}`}
             className="group relative flex shrink-0 items-center rounded-md py-0.5 transition-opacity hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/80"
           >
             {!logoFailed ? (
               <img
                 src={logoSrc}
-                alt="شعار شركة ساعد SAAED"
+                alt={BRAND_CONFIG.logoAlt}
                 referrerPolicy="no-referrer"
                 onError={() => setLogoFailed(true)}
-                className="h-8 w-auto max-w-[132px] object-contain drop-shadow-[0_2px_10px_rgba(2,14,36,0.7)] sm:h-9 sm:max-w-[155px] lg:h-[40px] lg:max-w-[175px]"
+                className="h-9 w-auto max-w-[132px] object-contain brightness-110 contrast-105 drop-shadow-[0_0_5px_rgba(255,255,255,0.82)] drop-shadow-[0_2px_10px_rgba(125,211,252,0.45)] sm:h-10 sm:max-w-[155px] lg:h-[42px] lg:max-w-[170px]"
               />
             ) : (
               <span className="text-base font-extrabold tracking-tight text-white">
-                SAAED <span className="text-rose-400">ساعد</span>
+                {BRAND_CONFIG.nameEn} <span className="text-rose-400">{BRAND_CONFIG.nameAr}</span>
               </span>
             )}
           </button>

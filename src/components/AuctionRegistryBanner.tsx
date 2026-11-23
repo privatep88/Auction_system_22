@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import auctionRegistryBannerImg from '../assets/images/auction_registry_banner_1794564774677.jpg';
-import { assetUrl, formatNumber } from '../utils/uaeDate';
+import { BRAND_CONFIG, getBrandLogoUrl } from '../config/brand';
+import { formatNumber } from '../utils/uaeDate';
 
 interface AuctionRegistryBannerProps {
   auctionCount: number;
@@ -18,7 +19,7 @@ export const AuctionRegistryBanner: React.FC<AuctionRegistryBannerProps> = ({
   const [bannerFailed, setBannerFailed] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
 
-  const logoSrc = assetUrl('assets/aistudio/logo_1afd1154.png');
+  const logoSrc = getBrandLogoUrl();
 
   return (
     <section
@@ -133,10 +134,10 @@ export const AuctionRegistryBanner: React.FC<AuctionRegistryBannerProps> = ({
               <div className="flex h-8.5 shrink-0 items-center justify-center rounded-lg bg-white/95 px-2.5 shadow-sm">
                 <img
                   src={logoSrc}
-                  alt="شعار شركة ساعد SAAED"
+                  alt={BRAND_CONFIG.logoAlt}
                   referrerPolicy="no-referrer"
                   onError={() => setLogoFailed(true)}
-                  className="h-5.5 w-auto object-contain"
+                  className="h-6 w-auto object-contain"
                 />
               </div>
             )}
@@ -145,7 +146,7 @@ export const AuctionRegistryBanner: React.FC<AuctionRegistryBannerProps> = ({
                 إدارة جلسات مزادات المركبات والساحات المعتمدة
               </h3>
               <p className="text-[11px] font-semibold tracking-wide text-blue-100/90 sm:text-xs">
-                SAAED Vehicle Auctions Registry · Live Operations Ledger
+                {BRAND_CONFIG.nameEn} Vehicle Auctions Registry · Live Operations Ledger
               </p>
             </div>
           </div>

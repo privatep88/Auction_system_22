@@ -14,8 +14,9 @@ import kpiGoldCoinsImg from '../assets/images/kpi_gold_coins_1794557319735.jpg';
 import kpiRecoveryTruckImg from '../assets/images/kpi_recovery_truck_1794557321870.jpg';
 import kpiWhiteSuvImg from '../assets/images/kpi_white_suv_1794557320051.jpg';
 import kpiForkliftImg from '../assets/images/kpi_yellow_forklift_1794557320622.jpg';
+import { BRAND_CONFIG, getBrandLogoUrl } from '../config/brand';
 import { ComputedFinancialMetrics, TabId } from '../types';
-import { assetUrl, formatNumber } from '../utils/uaeDate';
+import { formatNumber } from '../utils/uaeDate';
 
 interface KpiCardsRowProps {
   metrics: ComputedFinancialMetrics;
@@ -175,7 +176,7 @@ interface KpiCardConfig {
 }
 
 export const KpiCardsRow: React.FC<KpiCardsRowProps> = ({ metrics, onNavigateTab }) => {
-  const saaedLogoPath = assetUrl('assets/aistudio/logo_1afd1154.png');
+  const brandLogoPath = getBrandLogoUrl();
 
   const cards: KpiCardConfig[] = [
     {
@@ -255,15 +256,15 @@ export const KpiCardsRow: React.FC<KpiCardsRowProps> = ({ metrics, onNavigateTab
     },
     {
       id: 'saaed_share',
-      title: 'نسبة شركة ساعد من المحصل',
+      title: `نسبة ${BRAND_CONFIG.companyNameAr} من المحصل`,
       numericText: `${metrics.saaedSharePercent.toFixed(2)}%`,
       subtext: `AED ${formatNumber(metrics.saaedShareAmount)}`,
       subtextClassName: 'font-mono-num text-[#0B4F93] font-extrabold',
       targetTab: 'revenue-share',
       visual: (
         <StudioThumb
-          src={saaedLogoPath}
-          alt="شعار شركة ساعد"
+          src={brandLogoPath}
+          alt={BRAND_CONFIG.logoAlt}
           FallbackIcon={PieChart}
           blendMultiply={false}
           imgClassName="h-9 w-20"
@@ -297,14 +298,14 @@ export const KpiCardsRow: React.FC<KpiCardsRowProps> = ({ metrics, onNavigateTab
     },
     {
       id: 'recovery_fees',
-      title: 'نقل المركبات (ريكفري ساعد)',
+      title: `نقل المركبات (ريكفري ${BRAND_CONFIG.nameAr})`,
       isCurrency: true,
       numericText: formatNumber(metrics.totalRecoveryFees),
       targetTab: 'services-fees',
       visual: (
         <StudioThumb
           src={kpiRecoveryTruckImg}
-          alt="نقل المركبات ريكفري ساعد"
+          alt={`نقل المركبات ريكفري ${BRAND_CONFIG.nameAr}`}
           FallbackIcon={Truck}
           imgClassName="h-10 w-16"
         />

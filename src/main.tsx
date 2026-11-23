@@ -24,7 +24,7 @@ window.addEventListener('vite:preloadError', (event) => {
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
-  throw new Error('لم يتم العثور على عنصر الجذر (root) لتشغيل نظام مزادات ساعد.');
+  throw new Error('لم يتم العثور على عنصر الجذر (root) لتشغيل نظام مزادات ساهر.');
 }
 
 createRoot(rootElement).render(

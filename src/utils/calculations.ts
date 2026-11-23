@@ -8,6 +8,7 @@ import {
   SystemSettings,
   Vehicle,
 } from '../types';
+import { BRAND_CONFIG } from '../config/brand';
 import { ARABIC_MONTHS, formatAED, formatNumber, formatPercent } from './uaeDate';
 
 export function filterAuctions(auctions: Auction[], filter: FilterState): Auction[] {
@@ -260,11 +261,11 @@ export function computeFinancialMetrics(
     );
 
     executivePoints.push(
-      `بلغت إيرادات رسوم المنصة والخدمات الإضافية ${formatAED(totalServiceFees)} (المنصة ${formatAED(totalPlatformFees)}، الإدارية ${formatAED(totalAdminFees)}، الفوركلفت ${formatAED(totalForkliftFees)}، ريكفري ساعد ${formatAED(totalRecoveryFees)}).`
+      `بلغت إيرادات رسوم المنصة والخدمات الإضافية ${formatAED(totalServiceFees)} (المنصة ${formatAED(totalPlatformFees)}، الإدارية ${formatAED(totalAdminFees)}، الفوركلفت ${formatAED(totalForkliftFees)}، ريكفري ${BRAND_CONFIG.nameAr} ${formatAED(totalRecoveryFees)}).`
     );
 
     executivePoints.push(
-      `بلغ مستحق شركة ساعد المحسوب ${formatAED(saaedShareAmount)} (${saaedSharePercent.toFixed(2)}%) ومستحق الطرف الثالث ${formatAED(thirdPartyShareAmount)} (${thirdPartySharePercent.toFixed(2)}%) من ${includeServicesInShare ? 'إجمالي المحصل والخدمات' : 'محصل مبيعات المركبات فقط'}.`
+      `بلغ مستحق ${BRAND_CONFIG.companyNameAr} المحسوب ${formatAED(saaedShareAmount)} (${saaedSharePercent.toFixed(2)}%) ومستحق الطرف الثالث ${formatAED(thirdPartyShareAmount)} (${thirdPartySharePercent.toFixed(2)}%) من ${includeServicesInShare ? 'إجمالي المحصل والخدمات' : 'محصل مبيعات المركبات فقط'}.`
     );
 
     if (outstandingReceivables > 0) {

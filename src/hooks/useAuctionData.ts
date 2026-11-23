@@ -40,6 +40,7 @@ import {
   Vehicle,
   WorkspaceMode,
 } from '../types';
+import { BRAND_CONFIG } from '../config/brand';
 import { generateDemoDataset } from '../utils/demoDataGenerator';
 import { formatIsoDateParts, parseIsoDateParts } from '../utils/saleDate';
 import { generateSafeId, getUaeCurrentDate } from '../utils/uaeDate';
@@ -234,8 +235,8 @@ export function useAuctionData() {
             const isBootstrap = fbUser.email === 'mr.aljefre@gmail.com';
             const newProfile: UserProfile = {
               uid: fbUser.uid,
-              email: fbUser.email || 'user@saaed.ae',
-              displayName: fbUser.displayName || 'مستخدم ساعد',
+              email: fbUser.email || 'user@saher.ae',
+              displayName: fbUser.displayName || `مستخدم ${BRAND_CONFIG.nameAr}`,
               role: isBootstrap ? 'admin' : 'finance',
               department: 'إدارة مزادات المركبات',
               createdAt: serverTimestamp(),
@@ -768,10 +769,10 @@ export function useAuctionData() {
       amount: number;
       beneficiary: string;
     }> = [
-      { type: 'platform', amount: vehicle.platformFee, beneficiary: 'شركة ساعد – رسوم المنصة الإلكترونية' },
-      { type: 'admin', amount: vehicle.adminFee, beneficiary: 'شركة ساعد – الرسوم الإدارية' },
-      { type: 'forklift', amount: vehicle.forkliftFee, beneficiary: 'شركة ساعد – تشغيل الرافعات الشوكية' },
-      { type: 'recovery', amount: vehicle.recoveryFee, beneficiary: 'شركة ساعد – خدمات الريكفري والنقل' },
+      { type: 'platform', amount: vehicle.platformFee, beneficiary: `${BRAND_CONFIG.companyNameAr} – رسوم المنصة الإلكترونية` },
+      { type: 'admin', amount: vehicle.adminFee, beneficiary: `${BRAND_CONFIG.companyNameAr} – الرسوم الإدارية` },
+      { type: 'forklift', amount: vehicle.forkliftFee, beneficiary: `${BRAND_CONFIG.companyNameAr} – تشغيل الرافعات الشوكية` },
+      { type: 'recovery', amount: vehicle.recoveryFee, beneficiary: `${BRAND_CONFIG.companyNameAr} – خدمات الريكفري والنقل` },
     ];
     const generated: ServiceFeeRecord[] = [];
     for (const item of feeMap) {
@@ -1779,7 +1780,7 @@ export function useAuctionData() {
         'settings',
         settingId,
         'تحديث الإعدادات المالية',
-        `تحديث نسب التوزيع الافتراضية (${next.defaultSaaedSharePercent}% ساعد / ${next.defaultThirdPartySharePercent}% طرف ثالث)`,
+        `تحديث نسب التوزيع الافتراضية (${next.defaultSaaedSharePercent}% ${BRAND_CONFIG.nameAr} / ${next.defaultThirdPartySharePercent}% طرف ثالث)`,
         uae.year,
         uae.month
       );

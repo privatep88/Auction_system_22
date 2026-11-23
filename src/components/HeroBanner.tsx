@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BarChart3, Car, FileSpreadsheet, Gavel, Plus, Upload } from 'lucide-react';
-import heroReferencePanoramic from '../assets/images/hero_saaed_dual_flags_v3_1795122279509.jpg';
+import heroReferencePanoramic from '../assets/images/hero_saher_dual_flags_1795430589474.jpg';
+import { BRAND_CONFIG } from '../config/brand';
 import { TabId } from '../types';
 import styles from './HeroBanner.module.css';
 
@@ -31,7 +32,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
           {!sceneFailed ? (
             <img
               src={heroReferencePanoramic}
-              alt="مبنى شركة ساعد وعلم الإمارات وعلم شركة ساعد وساحة مزادات المركبات ومطرقة المزاد"
+              alt="مبنى شركة ساهر وعلم الإمارات وعلم شركة ساهر وساحة مزادات المركبات ومطرقة المزاد"
               referrerPolicy="no-referrer"
               onError={() => setSceneFailed(true)}
               className={styles.scenicImage}
@@ -83,16 +84,16 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
                 className={`${styles.heroTitle} flex flex-col items-center text-center`}
               >
                 <span className="whitespace-nowrap text-[12px] min-[400px]:text-[13px] min-[480px]:text-[15px] sm:text-[17px] md:text-[19px] lg:text-[18px] xl:text-[21px] 2xl:text-[24px]">
-                  نظام التقرير المالي والتحليل التنفيذي لمزادات المركبات
+                  {BRAND_CONFIG.systemTitleAr}
                 </span>
                 <span className="mt-0.5 whitespace-nowrap text-[11px] text-sky-100 min-[400px]:text-[12px] min-[480px]:text-[13.5px] sm:text-[15.5px] md:text-[17px] lg:text-[16.5px] xl:text-[18.5px] 2xl:text-[21px]">
-                  شركة ساعد للأنظمة المرورية
+                  {BRAND_CONFIG.companyFullAr}
                 </span>
               </h1>
               <p
                 className={`${styles.heroSubtitle} mt-1 whitespace-nowrap text-[8.5px] min-[400px]:text-[9.5px] min-[480px]:text-[10.5px] sm:text-[11.5px] md:text-[12.5px] lg:text-[11.5px] xl:text-[13px] 2xl:text-[14.5px]`}
               >
-                SAAED Vehicle Auctions – Financial &amp; Executive Analytics System
+                {BRAND_CONFIG.systemSubtitleEn}
               </p>
 
               {/* 3 Executive Vector Icons centered below Subtitle */}

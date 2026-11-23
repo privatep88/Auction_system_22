@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { CalendarDays, CalendarRange, TrendingUp } from 'lucide-react';
 import comparisonBannerImg from '../assets/images/monthly_comparison_seamless_1794567166105.jpg';
-import { assetUrl, formatNumber } from '../utils/uaeDate';
+import { BRAND_CONFIG, getBrandLogoUrl } from '../config/brand';
+import { formatNumber } from '../utils/uaeDate';
 import styles from './SaaedBanner.module.css';
 
 interface MonthlyAnnualComparisonBannerProps {
@@ -18,7 +19,7 @@ export const MonthlyAnnualComparisonBanner: React.FC<MonthlyAnnualComparisonBann
   const [bannerFailed, setBannerFailed] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
 
-  const logoSrc = assetUrl('assets/aistudio/logo_1afd1154.png');
+  const logoSrc = getBrandLogoUrl();
 
   return (
     <section
@@ -110,7 +111,7 @@ export const MonthlyAnnualComparisonBanner: React.FC<MonthlyAnnualComparisonBann
               <div className={styles.logoPlate}>
                 <img
                   src={logoSrc}
-                  alt="شعار شركة ساعد SAAED"
+                  alt={BRAND_CONFIG.logoAlt}
                   referrerPolicy="no-referrer"
                   onError={() => setLogoFailed(true)}
                   className={styles.logoImg}

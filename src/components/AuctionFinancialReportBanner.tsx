@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import reportBannerImg from '../assets/images/report_financial_banner_1794564228814.jpg';
-import { assetUrl } from '../utils/uaeDate';
+import { BRAND_CONFIG, getBrandLogoUrl } from '../config/brand';
 
 interface AuctionFinancialReportBannerProps {
   periodLabel: string;
@@ -20,7 +20,7 @@ export const AuctionFinancialReportBanner: React.FC<AuctionFinancialReportBanner
   const [bannerFailed, setBannerFailed] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
 
-  const logoSrc = assetUrl('assets/aistudio/logo_1afd1154.png');
+  const logoSrc = getBrandLogoUrl();
 
   return (
     <section
@@ -139,10 +139,10 @@ export const AuctionFinancialReportBanner: React.FC<AuctionFinancialReportBanner
               <div className="flex h-9 shrink-0 items-center justify-center rounded-lg bg-white/95 px-2.5 shadow-sm">
                 <img
                   src={logoSrc}
-                  alt="شعار شركة ساعد SAAED"
+                  alt={BRAND_CONFIG.logoAlt}
                   referrerPolicy="no-referrer"
                   onError={() => setLogoFailed(true)}
-                  className="h-6 w-auto object-contain"
+                  className="h-6.5 w-auto object-contain"
                 />
               </div>
             )}
@@ -153,7 +153,7 @@ export const AuctionFinancialReportBanner: React.FC<AuctionFinancialReportBanner
                   : 'البيان المالي التنفيذي لمزادات المركبات'}
               </h3>
               <p className="text-[11px] font-semibold tracking-wide text-blue-100/90 sm:text-xs">
-                SAAED Vehicle Auctions · Official Financial Statement
+                {BRAND_CONFIG.nameEn} Vehicle Auctions · Official Financial Statement
               </p>
             </div>
           </div>

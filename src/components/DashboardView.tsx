@@ -22,7 +22,8 @@ import cardBannerServicesFleet from '../assets/images/card_banner_services_fleet
 import cardBannerTopLuxury from '../assets/images/card_banner_top_luxury_1794558084230.jpg';
 import cardBannerTrendCoupe from '../assets/images/card_banner_trend_coupe_1794558083188.jpg';
 import cardBannerVehicleRows from '../assets/images/card_banner_vehicle_rows_1794558081302.jpg';
-import saaedFacilityBanner from '../assets/images/saaed_executive_banner_panoramic.jpg';
+import saaedFacilityBanner from '../assets/images/saher_executive_panoramic_1795430590997.jpg';
+import { BRAND_CONFIG } from '../config/brand';
 import {
   ComputedFinancialMetrics,
   FilterState,
@@ -260,7 +261,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <DonutChartCard
             darkHeader
             bannerImg={cardBannerServicesFleet}
-            bannerAlt="خدمات الفوركلفت ونقل المركبات ريكفري ساعد"
+            bannerAlt={`خدمات الفوركلفت ونقل المركبات ريكفري ${BRAND_CONFIG.nameAr}`}
             bannerObjectPosition="center 52%"
             title="توزيع إيرادات الخدمات الإضافية"
             centerPrimary={formatAED(metrics.totalServiceFees)}
@@ -332,7 +333,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <div className="executive-auction-banner shrink-0">
               <img
                 src={saaedFacilityBanner}
-                alt="مبنى شركة ساعد وعلم دولة الإمارات ومطرقة المزاد وساحة المركبات"
+                alt={`مبنى ${BRAND_CONFIG.companyNameAr} وعلم دولة الإمارات ومطرقة المزاد وساحة المركبات`}
                 referrerPolicy="no-referrer"
                 onError={() => setFacilityBannerFailed(true)}
                 className="h-full w-full object-cover object-[50%_18%] contrast-[1.03] saturate-[1.04] select-none"
@@ -382,7 +383,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             headerIcon={<Coins className="h-4.5 w-4.5 shrink-0 text-sky-300" />}
             segments={[
               {
-                label: 'حصة ساعد',
+                label: `حصة ${BRAND_CONFIG.nameAr}`,
                 detailLine: `(${metrics.saaedSharePercent.toFixed(2)}%)`,
                 value: metrics.saaedShareAmount,
                 color: '#0A569E',

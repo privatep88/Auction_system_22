@@ -1,5 +1,5 @@
 import React from 'react';
-import { assetUrl } from '../utils/uaeDate';
+import { BRAND_CONFIG, getBrandLogoUrl } from '../config/brand';
 
 interface AppErrorBoundaryProps {
   children: React.ReactNode;
@@ -30,7 +30,7 @@ export class AppErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
-    console.error('[SAAED Runtime Boundary]', error, errorInfo);
+    console.error('[SAHER Runtime Boundary]', error, errorInfo);
   }
 
   private handleReload = () => {
@@ -42,7 +42,7 @@ export class AppErrorBoundary extends React.Component<
       return this.props.children;
     }
 
-    const logoSrc = assetUrl('assets/aistudio/logo_1afd1154.png');
+    const logoSrc = getBrandLogoUrl();
 
     return (
       <div
@@ -55,16 +55,16 @@ export class AppErrorBoundary extends React.Component<
               <div className="bg-white/95 rounded-lg p-1.5 shadow-sm">
                 <img
                   src={logoSrc}
-                  alt="شعار ساعد"
+                  alt={BRAND_CONFIG.logoAlt}
                   className="h-7 w-auto object-contain"
                 />
               </div>
               <div>
                 <h1 className="text-sm sm:text-base font-bold">
-                  نظام التقرير المالي لمزادات المركبات – ساعد
+                  نظام التقرير المالي لمزادات المركبات – {BRAND_CONFIG.nameAr}
                 </h1>
                 <p className="text-[11px] text-sky-100/90">
-                  SAAED Vehicle Auctions – Financial Analytics
+                  {BRAND_CONFIG.nameEn} Vehicle Auctions – Financial Analytics
                 </p>
               </div>
             </div>

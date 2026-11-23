@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { FileText, Forklift, Monitor, Truck } from 'lucide-react';
 import servicesBannerImg from '../assets/images/platform_services_seamless_1794567165789.jpg';
-import { assetUrl, formatAED, formatNumber } from '../utils/uaeDate';
+import { BRAND_CONFIG, getBrandLogoUrl } from '../config/brand';
+import { formatAED, formatNumber } from '../utils/uaeDate';
 import styles from './SaaedBanner.module.css';
 
 interface PlatformServicesBannerProps {
@@ -16,7 +17,7 @@ export const PlatformServicesBanner: React.FC<PlatformServicesBannerProps> = ({
   const [bannerFailed, setBannerFailed] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
 
-  const logoSrc = assetUrl('assets/aistudio/logo_1afd1154.png');
+  const logoSrc = getBrandLogoUrl();
 
   return (
     <section
@@ -108,7 +109,7 @@ export const PlatformServicesBanner: React.FC<PlatformServicesBannerProps> = ({
               <div className={styles.logoPlate}>
                 <img
                   src={logoSrc}
-                  alt="شعار شركة ساعد SAAED"
+                  alt={BRAND_CONFIG.logoAlt}
                   referrerPolicy="no-referrer"
                   onError={() => setLogoFailed(true)}
                   className={styles.logoImg}
@@ -120,7 +121,7 @@ export const PlatformServicesBanner: React.FC<PlatformServicesBannerProps> = ({
                 منظومة رسوم المنصة والخدمات التشغيلية واللوجستية
               </h3>
               <p className={styles.englishSubtitle}>
-                SAAED Digital Platform, Post-Sale Admin, Forklift &amp; Recovery Services
+                {BRAND_CONFIG.nameEn} Digital Platform, Post-Sale Admin, Forklift &amp; Recovery Services
               </p>
             </div>
           </div>
@@ -149,7 +150,7 @@ export const PlatformServicesBanner: React.FC<PlatformServicesBannerProps> = ({
             </span>
             <span className="inline-flex items-center gap-1 text-rose-200">
               <Truck className="h-3.5 w-3.5" />
-              <span>ريكفري ساعد</span>
+              <span>ريكفري {BRAND_CONFIG.nameAr}</span>
             </span>
             <span aria-hidden="true" className="text-sky-300/60">
               |

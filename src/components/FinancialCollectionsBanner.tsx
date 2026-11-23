@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import collectionsBannerImg from '../assets/images/financial_collections_banner_1794565252180.jpg';
-import { assetUrl, formatNumber, formatPercent } from '../utils/uaeDate';
+import { BRAND_CONFIG, getBrandLogoUrl } from '../config/brand';
+import { formatNumber, formatPercent } from '../utils/uaeDate';
 
 interface FinancialCollectionsBannerProps {
   receiptsCount: number;
@@ -16,7 +17,7 @@ export const FinancialCollectionsBanner: React.FC<FinancialCollectionsBannerProp
   const [bannerFailed, setBannerFailed] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
 
-  const logoSrc = assetUrl('assets/aistudio/logo_1afd1154.png');
+  const logoSrc = getBrandLogoUrl();
 
   return (
     <section
@@ -123,10 +124,10 @@ export const FinancialCollectionsBanner: React.FC<FinancialCollectionsBannerProp
               <div className="flex h-8.5 shrink-0 items-center justify-center rounded-lg bg-white/95 px-2.5 shadow-sm">
                 <img
                   src={logoSrc}
-                  alt="شعار شركة ساعد SAAED"
+                  alt={BRAND_CONFIG.logoAlt}
                   referrerPolicy="no-referrer"
                   onError={() => setLogoFailed(true)}
-                  className="h-5.5 w-auto object-contain"
+                  className="h-6 w-auto object-contain"
                 />
               </div>
             )}
@@ -135,7 +136,7 @@ export const FinancialCollectionsBanner: React.FC<FinancialCollectionsBannerProp
                 إدارة التحصيلات المالية ومستحقات مزادات المركبات
               </h3>
               <p className="text-[11px] font-semibold tracking-wide text-blue-100/90 sm:text-xs">
-                SAAED Vehicle Auction Collections &amp; Payment Management
+                {BRAND_CONFIG.nameEn} Vehicle Auction Collections &amp; Payment Management
               </p>
             </div>
           </div>

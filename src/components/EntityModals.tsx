@@ -10,10 +10,10 @@ import {
   Vehicle,
   VehicleStatus,
 } from '../types';
+import { BRAND_CONFIG, getBrandLogoUrl } from '../config/brand';
 import {
   ARABIC_MONTHS,
   UAE_LOCATIONS,
-  assetUrl,
   formatAED,
   getUaeCurrentDate,
 } from '../utils/uaeDate';
@@ -33,7 +33,7 @@ const EntityModalHeader: React.FC<EntityModalHeaderProps> = ({
   disabled = false,
 }) => {
   const [logoFailed, setLogoFailed] = useState(false);
-  const logoSrc = assetUrl('assets/aistudio/logo_1afd1154.png');
+  const logoSrc = getBrandLogoUrl();
 
   return (
     <div
@@ -46,10 +46,10 @@ const EntityModalHeader: React.FC<EntityModalHeaderProps> = ({
         {!logoFailed && (
           <img
             src={logoSrc}
-            alt="SAAED"
+            alt={BRAND_CONFIG.logoAlt}
             referrerPolicy="no-referrer"
             onError={() => setLogoFailed(true)}
-            className="h-5 w-auto shrink-0 object-contain"
+            className="h-6 w-auto shrink-0 object-contain brightness-110 contrast-105 drop-shadow-[0_0_5px_rgba(255,255,255,0.85)]"
           />
         )}
         <h3 id={titleId} className="truncate text-sm font-extrabold">
@@ -271,7 +271,7 @@ export const AuctionModal: React.FC<AuctionModalProps> = ({
       thirdPartySharePercent < 0 ||
       saaedSharePercent + thirdPartySharePercent > 100.01
     ) {
-      const msg = 'مجموع نسبة ساعد ونسبة الطرف الثالث يجب ألا يتجاوز 100% وفق الضوابط المعتمدة.';
+      const msg = `مجموع نسبة ${BRAND_CONFIG.nameAr} ونسبة الطرف الثالث يجب ألا يتجاوز 100% وفق الضوابط المعتمدة.`;
       nextErrors.saaedSharePercent = msg;
       issues.push({
         fieldKey: 'saaedSharePercent',
@@ -319,7 +319,7 @@ export const AuctionModal: React.FC<AuctionModalProps> = ({
           { label: 'الموقع / الساحة', value: payload.location },
           {
             label: 'نسبة التوزيع',
-            value: `ساعد ${payload.saaedSharePercent}% / طرف ثالث ${payload.thirdPartySharePercent}%`,
+            value: `${BRAND_CONFIG.nameAr} ${payload.saaedSharePercent}% / طرف ثالث ${payload.thirdPartySharePercent}%`,
           },
         ],
         cancelLabel: 'مراجعة البيانات',
@@ -486,7 +486,7 @@ export const AuctionModal: React.FC<AuctionModalProps> = ({
             </div>
 
             <div>
-              <label className="mb-1 block font-bold text-slate-700">نسبة شركة ساعد (%)</label>
+              <label className="mb-1 block font-bold text-slate-700">نسبة {BRAND_CONFIG.companyNameAr} (%)</label>
               <input
                 ref={shareInputRef}
                 type="number"
@@ -793,7 +793,7 @@ export const VehicleModal: React.FC<VehicleModalProps> = ({
       { key: 'platformFee', label: 'رسوم المنصة', value: platformFee },
       { key: 'adminFee', label: 'الرسوم الإدارية', value: adminFee },
       { key: 'forkliftFee', label: 'رسوم الفوركلفت', value: forkliftFee },
-      { key: 'recoveryFee', label: 'ريكفري ساعد', value: recoveryFee },
+      { key: 'recoveryFee', label: `ريكفري ${BRAND_CONFIG.nameAr}`, value: recoveryFee },
     ];
 
     for (const item of numericChecks) {
@@ -1203,7 +1203,7 @@ export const VehicleModal: React.FC<VehicleModalProps> = ({
               />
             </div>
             <div>
-              <label className="mb-1 block font-bold text-slate-700">ريكفري ساعد (AED)</label>
+              <label className="mb-1 block font-bold text-slate-700">ريكفري {BRAND_CONFIG.nameAr} (AED)</label>
               <input
                 type="number"
                 min={0}

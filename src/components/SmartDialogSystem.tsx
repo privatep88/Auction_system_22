@@ -23,7 +23,7 @@ import {
   Trash2,
   X,
 } from 'lucide-react';
-import { assetUrl } from '../utils/uaeDate';
+import { BRAND_CONFIG, getBrandLogoUrl } from '../config/brand';
 
 export type SmartDialogVariant =
   | 'success'
@@ -205,7 +205,7 @@ export const AppDialog: React.FC<AppDialogProps> = ({
 
   const cfg = VARIANT_CONFIG[variant];
   const Icon = cfg.icon;
-  const logoSrc = assetUrl('assets/aistudio/logo_1afd1154.png');
+  const logoSrc = getBrandLogoUrl();
 
   useEffect(() => {
     if (!isOpen) return;
@@ -301,7 +301,7 @@ export const AppDialog: React.FC<AppDialogProps> = ({
           />
         )}
 
-        {/* SAAED Corporate Navy Header */}
+        {/* SAHER Corporate Navy Header */}
         <div
           className="relative flex shrink-0 items-center justify-between gap-3 px-4 py-3 text-white sm:px-5"
           style={{
@@ -326,10 +326,10 @@ export const AppDialog: React.FC<AppDialogProps> = ({
             {!logoFailed && (
               <img
                 src={logoSrc}
-                alt="SAAED"
+                alt={BRAND_CONFIG.logoAlt}
                 referrerPolicy="no-referrer"
                 onError={() => setLogoFailed(true)}
-                className="hidden h-5 w-auto object-contain opacity-95 sm:block"
+                className="hidden h-6 w-auto object-contain brightness-110 contrast-105 drop-shadow-[0_0_5px_rgba(255,255,255,0.85)] sm:block"
               />
             )}
             {dismissible && (

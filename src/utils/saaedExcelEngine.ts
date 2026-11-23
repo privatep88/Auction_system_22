@@ -10,6 +10,7 @@ import {
   SystemSettings,
   Vehicle,
 } from '../types';
+import { BRAND_CONFIG } from '../config/brand';
 import { buildAuctionLookupMap, resolveVehicleAuction } from './auctionLink';
 import { ARABIC_MONTHS, assetUrl, getMonthLabel, getUaeCurrentDate } from './uaeDate';
 
@@ -29,11 +30,11 @@ const platformServicesBannerUrl = resolveAssetWebUrl('platform_services_banner_1
 const reportFinancialBannerUrl = resolveAssetWebUrl('report_financial_banner_1794564228814.jpg');
 const reportsArchiveBannerUrl = resolveAssetWebUrl('reports_archive_banner_1794566716111.jpg');
 const revenueDistributionBannerUrl = resolveAssetWebUrl('revenue_distribution_banner_1794565474783.jpg');
-const executiveBannerUrl = resolveAssetWebUrl('saaed_executive_banner_panoramic.jpg');
+const executiveBannerUrl = resolveAssetWebUrl('saher_executive_panoramic_1795430590997.jpg');
 const vehicleInventoryBannerUrl = resolveAssetWebUrl('vehicle_inventory_banner_1794564934550.jpg');
 
 /* ============================================================================
-   1. ExcelThemeManager — SAAED Corporate Identity & Number Formats
+   1. ExcelThemeManager — SAHER Corporate Identity & Number Formats
 ============================================================================ */
 export type ExcelReportDomain =
   | 'dashboard'
@@ -131,7 +132,7 @@ export class ExcelThemeManager {
 }
 
 /* ============================================================================
-   2. ExcelImageManager — Embedded Official SAAED Logo, Domain Banners & Charts
+   2. ExcelImageManager — Embedded Official SAHER Logo, Domain Banners & Charts
 ============================================================================ */
 interface LoadedImageAsset {
   base64: string;
@@ -141,7 +142,7 @@ interface LoadedImageAsset {
 const DOMAIN_BANNER_PATHS: Record<ExcelReportDomain, { webUrl: string; diskPath: string }> = {
   dashboard: {
     webUrl: executiveBannerUrl,
-    diskPath: 'src/assets/images/saaed_executive_banner_panoramic.jpg',
+    diskPath: 'src/assets/images/saher_executive_panoramic_1795430590997.jpg',
   },
   'financial-report': {
     webUrl: reportFinancialBannerUrl,
@@ -256,9 +257,9 @@ export class ExcelImageManager {
 
   static async loadOfficialLogo(): Promise<LoadedImageAsset | null> {
     return ExcelImageManager.loadAsset(
-      'saaed_official_logo',
-      assetUrl('assets/aistudio/logo_1afd1154.png'),
-      'public/assets/aistudio/logo_1afd1154.png',
+      'saher_official_logo',
+      assetUrl(BRAND_CONFIG.logoExcelAssetPath),
+      BRAND_CONFIG.logoExcelDiskPath,
       'png'
     );
   }
@@ -316,9 +317,9 @@ export class ExcelPrintConfigurator {
 
     sheet.headerFooter = {
       differentFirst: false,
-      oddHeader: `&R&"Cairo,Bold"&9شركة ساعد للأنظمة المرورية | SAAED&C&"Cairo,Bold"&9${options.reportTitle}&L&"Cairo,Regular"&8&D`,
+      oddHeader: `&R&"Cairo,Bold"&9${BRAND_CONFIG.companyFullAr} | ${BRAND_CONFIG.nameEn}&C&"Cairo,Bold"&9${options.reportTitle}&L&"Cairo,Regular"&8&D`,
       oddFooter:
-        '&R&"Cairo,Bold"&9شركة ساعد | SAAED&C&"Cairo,Regular"&9إعداد وتصميم: خالد الهاشمي&L&"Cairo,Regular"&9صفحة &P من &N',
+        `&R&"Cairo,Bold"&9${BRAND_CONFIG.bilingualArEn}&C&"Cairo,Regular"&9إعداد وتصميم: خالد الهاشمي&L&"Cairo,Regular"&9صفحة &P من &N`,
     };
   }
 }
@@ -398,8 +399,7 @@ export class ExcelLayoutEngine {
     sheet.mergeCells(`A4:${lastColLetter}4`);
 
     const titleCell1 = sheet.getCell('A1');
-    titleCell1.value =
-      'نظام التقرير المالي والتحليل التنفيذي لمزادات المركبات – شركة ساعد';
+    titleCell1.value = BRAND_CONFIG.systemFullTitleAr;
     titleCell1.font = ExcelThemeManager.font({
       size: 14,
       bold: true,
@@ -408,8 +408,7 @@ export class ExcelLayoutEngine {
     titleCell1.alignment = { horizontal: 'center', vertical: 'middle' };
 
     const titleCell2 = sheet.getCell('A2');
-    titleCell2.value =
-      'SAAED Vehicle Auctions – Financial & Executive Analytics System';
+    titleCell2.value = BRAND_CONFIG.systemSubtitleEn;
     titleCell2.font = ExcelThemeManager.font({
       size: 10,
       bold: true,
@@ -454,7 +453,7 @@ export class ExcelLayoutEngine {
       envCell.border = ExcelThemeManager.border(ExcelThemeManager.COLORS.amberGold);
     } else {
       envCell.value =
-        'حالة البيانات: بيانات إنتاجية معتمدة — مستخرجة من السجلات المالية الرسمية لشركة ساعد';
+        `حالة البيانات: بيانات إنتاجية معتمدة — مستخرجة من السجلات المالية الرسمية ل${BRAND_CONFIG.companyNameAr}`;
       envCell.fill = ExcelThemeManager.fill(ExcelThemeManager.COLORS.emeraldSoftBg);
       envCell.font = ExcelThemeManager.font({
         size: 10,
@@ -465,7 +464,7 @@ export class ExcelLayoutEngine {
     }
     envCell.alignment = { horizontal: 'center', vertical: 'middle' };
 
-    // Embed Official SAAED Logo & Domain Panoramic Image
+    // Embed Official SAHER Logo & Domain Panoramic Image
     const [logoAsset, bannerAsset] = await Promise.all([
       ExcelImageManager.loadOfficialLogo(),
       ExcelImageManager.loadDomainBanner(meta.domain),
@@ -477,8 +476,8 @@ export class ExcelLayoutEngine {
         extension: logoAsset.extension,
       });
       sheet.addImage(logoImgId, {
-        tl: { col: 0.15, row: 0.15 },
-        ext: { width: 135, height: 64 },
+        tl: { col: 0.15, row: 0.12 },
+        ext: { width: 102, height: 68 },
         editAs: 'oneCell',
       });
     }
@@ -966,8 +965,8 @@ export class ExcelExportService {
     );
 
     const workbook = new ExcelJS.Workbook();
-    workbook.creator = 'شركة ساعد للأنظمة المرورية | خالد الهاشمي';
-    workbook.lastModifiedBy = 'SAAED Enterprise Excel Reporting Engine';
+    workbook.creator = `${BRAND_CONFIG.companyFullAr} | خالد الهاشمي`;
+    workbook.lastModifiedBy = `${BRAND_CONFIG.nameEn} Enterprise Excel Reporting Engine`;
     workbook.created = new Date();
     workbook.modified = new Date();
     workbook.calcProperties.fullCalcOnLoad = true;
@@ -1576,7 +1575,7 @@ export class ExcelExportService {
             totalServices > 0 ? totalPlatform / totalServices : 0,
             totalPlatform,
             soldCount > 0 ? Math.round(totalPlatform / soldCount) : 0,
-            'إيراد خدمات مباشر (100% ساعد)',
+            `إيراد خدمات مباشر (100% ${BRAND_CONFIG.nameAr})`,
             'محصل بالكامل',
             ExcelLayoutEngine.buildVisualProgressBar(
               totalServices > 0 ? totalPlatform / totalServices : 0
@@ -1591,7 +1590,7 @@ export class ExcelExportService {
             totalServices > 0 ? totalAdmin / totalServices : 0,
             totalAdmin,
             soldCount > 0 ? Math.round(totalAdmin / soldCount) : 0,
-            'إيراد خدمات مباشر (100% ساعد)',
+            `إيراد خدمات مباشر (100% ${BRAND_CONFIG.nameAr})`,
             'محصل بالكامل',
             ExcelLayoutEngine.buildVisualProgressBar(
               totalServices > 0 ? totalAdmin / totalServices : 0
@@ -1606,7 +1605,7 @@ export class ExcelExportService {
             totalServices > 0 ? totalForklift / totalServices : 0,
             totalForklift,
             soldCount > 0 ? Math.round(totalForklift / soldCount) : 0,
-            'إيراد خدمات مباشر (100% ساعد)',
+            `إيراد خدمات مباشر (100% ${BRAND_CONFIG.nameAr})`,
             'محصل بالكامل',
             ExcelLayoutEngine.buildVisualProgressBar(
               totalServices > 0 ? totalForklift / totalServices : 0
@@ -1616,12 +1615,12 @@ export class ExcelExportService {
         },
         {
           cells: [
-            'خدمات النقل وريكفري ساعد',
+            `خدمات النقل وريكفري ${BRAND_CONFIG.nameAr}`,
             vehicles.filter((v) => v.recoveryFee > 0).length,
             totalServices > 0 ? totalRecovery / totalServices : 0,
             totalRecovery,
             soldCount > 0 ? Math.round(totalRecovery / soldCount) : 0,
-            'إيراد خدمات مباشر (100% ساعد)',
+            `إيراد خدمات مباشر (100% ${BRAND_CONFIG.nameAr})`,
             'محصل بالكامل',
             ExcelLayoutEngine.buildVisualProgressBar(
               totalServices > 0 ? totalRecovery / totalServices : 0

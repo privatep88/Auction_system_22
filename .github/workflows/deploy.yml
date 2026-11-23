@@ -1,4 +1,4 @@
-name: Deploy SAAED Vehicle Auctions to GitHub Pages
+name: Deploy SAHER Vehicle Auctions to GitHub Pages
 
 on:
   push:
@@ -99,7 +99,9 @@ jobs:
           test -f dist/404.html
           test -f dist/.nojekyll
           test -d dist/assets
-          test -f dist/assets/aistudio/logo_1afd1154.png
+          test -f dist/assets/brand/saher-logo.png
+          test -f dist/assets/brand/saher-favicon.png
+          test -f dist/assets/brand/saher-logo-excel.png
           if grep -qE "/src/(main|index)\.tsx" dist/index.html dist/404.html; then
             echo "ERROR: Uncompiled source entry reference found in dist HTML"
             exit 1

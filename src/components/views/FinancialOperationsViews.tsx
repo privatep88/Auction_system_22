@@ -62,6 +62,7 @@ import {
   getAuctionLinkedVehicles,
   resolveVehicleAuction,
 } from '../../utils/auctionLink';
+import { BRAND_CONFIG } from '../../config/brand';
 import { exportVehiclesToXlsx } from '../../utils/excelCsv';
 import { ARABIC_MONTHS, formatAED, formatNumber, formatPercent, getMonthLabel } from '../../utils/uaeDate';
 import { AuctionFinancialReportBanner } from '../AuctionFinancialReportBanner';
@@ -270,7 +271,7 @@ export const FinancialReportView: React.FC<FinancialReportViewProps> = ({
       valueCls: metrics.outstandingReceivables > 0 ? 'text-amber-700' : 'text-[#0A2C52]',
     },
     {
-      item: `9. حصة شركة ساعد من المبالغ المحصلة (${metrics.saaedSharePercent.toFixed(2)}%)`,
+      item: `9. حصة ${BRAND_CONFIG.companyNameAr} من المبالغ المحصلة (${metrics.saaedSharePercent.toFixed(2)}%)`,
       val: formatAED(metrics.saaedShareAmount),
       icon: Handshake,
       iconCls: 'bg-blue-50 text-[#0B4F93]',
@@ -300,7 +301,7 @@ export const FinancialReportView: React.FC<FinancialReportViewProps> = ({
       iconCls: 'bg-amber-50 text-amber-700',
     },
     {
-      item: '14. خدمات نقل المركبات (ريكفري ساعد) المحصلة',
+      item: `14. خدمات نقل المركبات (ريكفري ${BRAND_CONFIG.nameAr}) المحصلة`,
       val: formatAED(metrics.totalRecoveryFees),
       icon: Truck,
       iconCls: 'bg-teal-50 text-teal-700',
@@ -752,7 +753,7 @@ export const AuctionsRegistryView: React.FC<AuctionsRegistryViewProps> = ({
                 <th className="px-3.5 py-3 font-extrabold">القيمة التقديرية</th>
                 <th className="px-3.5 py-3 font-extrabold">إجمالي البيع</th>
                 <th className="px-3.5 py-3 font-extrabold">المحصل</th>
-                <th className="px-3.5 py-3 font-extrabold">ساعد / الطرف 3</th>
+                <th className="px-3.5 py-3 font-extrabold">{BRAND_CONFIG.nameAr} / الطرف 3</th>
                 <th className="px-3.5 py-3 font-extrabold">الحالة</th>
                 <th className="px-3.5 py-3 text-center font-extrabold">إجراءات</th>
               </tr>
@@ -1010,7 +1011,7 @@ export const AuctionsRegistryView: React.FC<AuctionsRegistryViewProps> = ({
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                   <div className="rounded-lg border border-blue-100 bg-blue-50/70 p-3">
                     <div className="font-bold text-slate-600">
-                      حصة شركة ساعد ({activeInspectingAuction.saaedSharePercent}%)
+                      حصة {BRAND_CONFIG.companyNameAr} ({activeInspectingAuction.saaedSharePercent}%)
                     </div>
                     <div dir="ltr" className="font-mono-num mt-0.5 text-right text-sm font-extrabold text-[#0A2C52]">
                       {formatAED(inspectedStats.saaedShare)}
@@ -1289,7 +1290,7 @@ export const VehiclesLedgerView: React.FC<VehiclesLedgerViewProps> = ({
     if (lastAnomalySigRef.current !== sig) {
       lastAnomalySigRef.current = sig;
       console.info(
-        `[SAAED Audit] سجل المركبات: ${anomalySummary.unlinkedCount} غير مرتبط بمزاد، ${anomalySummary.unavailableCount} مرتبط بمزاد غير متاح.`
+        `[${BRAND_CONFIG.nameEn} Audit] سجل المركبات: ${anomalySummary.unlinkedCount} غير مرتبط بمزاد، ${anomalySummary.unavailableCount} مرتبط بمزاد غير متاح.`
       );
     }
   }, [anomalySummary]);
@@ -1387,7 +1388,7 @@ export const VehiclesLedgerView: React.FC<VehiclesLedgerViewProps> = ({
               try {
                 const report = await exportVehiclesToXlsx(
                   visible,
-                  `SAAED_Vehicles_${filter.year}_${filter.month}`,
+                  `${BRAND_CONFIG.nameEn}_Vehicles_${filter.year}_${filter.month}`,
                   isDemoMode,
                   auctionsById
                 );

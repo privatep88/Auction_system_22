@@ -8,7 +8,8 @@ import {
   ParsedVehicleImportRow,
   parseVehiclesSpreadsheet,
 } from '../utils/excelCsv';
-import { ARABIC_MONTHS, UAE_LOCATIONS, assetUrl, formatAED, formatNumber } from '../utils/uaeDate';
+import { BRAND_CONFIG, getBrandLogoUrl } from '../config/brand';
+import { ARABIC_MONTHS, UAE_LOCATIONS, formatAED, formatNumber } from '../utils/uaeDate';
 import { useSmartDialog } from './SmartDialogSystem';
 
 interface ImportModalProps {
@@ -54,7 +55,7 @@ export const ImportModal: React.FC<ImportModalProps> = ({
   const [importing, setImporting] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
 
-  const logoSrc = assetUrl('assets/aistudio/logo_1afd1154.png');
+  const logoSrc = getBrandLogoUrl();
 
   useEffect(() => {
     if (!isOpen) return;
@@ -184,10 +185,10 @@ export const ImportModal: React.FC<ImportModalProps> = ({
             {!logoFailed && (
               <img
                 src={logoSrc}
-                alt="SAAED"
+                alt={BRAND_CONFIG.logoAlt}
                 referrerPolicy="no-referrer"
                 onError={() => setLogoFailed(true)}
-                className="h-5 w-auto shrink-0 object-contain"
+                className="h-6 w-auto shrink-0 object-contain brightness-110 contrast-105 drop-shadow-[0_0_5px_rgba(255,255,255,0.85)]"
               />
             )}
             <FileSpreadsheet className="h-5 w-5 shrink-0 text-sky-300" />

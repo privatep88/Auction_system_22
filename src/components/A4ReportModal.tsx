@@ -17,8 +17,8 @@ import {
   FilterState,
   MonthlyTrendPoint,
 } from '../types';
+import { BRAND_CONFIG, getBrandLogoUrl } from '../config/brand';
 import {
-  assetUrl,
   formatAED,
   formatNumber,
   formatPercent,
@@ -75,7 +75,7 @@ export const A4ReportContent: React.FC<A4ReportContentProps> = ({
   const [logoFailed, setLogoFailed] = useState(false);
   const [bannerImgFailed, setBannerImgFailed] = useState(false);
 
-  const logoSrc = assetUrl('assets/aistudio/logo_1afd1154.png');
+  const logoSrc = getBrandLogoUrl();
   const uae = getUaeCurrentDate();
   const isDemoReport = isDemoMode || Boolean(snapshotReport?.isDemo);
 
@@ -203,7 +203,7 @@ export const A4ReportContent: React.FC<A4ReportContentProps> = ({
     { label: '8. المبالغ المحصلة من المزايدين', value: formatAED(effectiveCollected) },
     { label: '9. المبالغ المتبقية قيد التحصيل', value: formatAED(effectiveOutstanding) },
     {
-      label: '10. حصة شركة ساعد من المبالغ المحصلة',
+      label: `10. حصة ${BRAND_CONFIG.companyNameAr} من المبالغ المحصلة`,
       value: `${formatAED(effectiveSaaedShare)} (${effectiveSaaedPct.toFixed(2)}%)`,
     },
     {
@@ -213,7 +213,7 @@ export const A4ReportContent: React.FC<A4ReportContentProps> = ({
     { label: '12. رسوم المنصة للمركبات المبيعة', value: formatAED(effectivePlatformFees) },
     { label: '13. الرسوم الإدارية بعد البيع', value: formatAED(effectiveAdminFees) },
     { label: '14. مبالغ خدمات الفوركلفت', value: formatAED(effectiveForkliftFees) },
-    { label: '15. مبالغ نقل المركبات – ريكفري ساعد', value: formatAED(effectiveRecoveryFees) },
+    { label: `15. مبالغ نقل المركبات – ريكفري ${BRAND_CONFIG.nameAr}`, value: formatAED(effectiveRecoveryFees) },
     { label: '16. إجمالي رسوم الخدمات المحصلة', value: formatAED(effectiveTotalServices) },
   ];
 
@@ -242,7 +242,7 @@ export const A4ReportContent: React.FC<A4ReportContentProps> = ({
         `بلغت نسبة نجاح البيع في هذه النسخة المعتمدة ${formatPercent(effectiveSuccessRate, 2)} بواقع ${formatNumber(effectiveSold)} مركبة مبيعة من أصل ${formatNumber(effectiveDisplayed)} مركبة معروضة.`,
         `وصلت كفاءة التحصيل المالي إلى ${formatPercent(effectiveCollectionRate, 2)} بإجمالي مبالغ محصلة ${formatAED(effectiveCollected)} من أصل ${formatAED(effectiveSale)}.`,
         `سجل فارق البيع عن القيمة التقديرية للمركبات المبيعة ${formatAED(effectiveVarianceAmt)} (${effectiveVariancePct !== null ? `${effectiveVariancePct >= 0 ? '+' : ''}${effectiveVariancePct.toFixed(2)}%` : '—'}).`,
-        `توزعت حصص المبالغ المحصلة بواقع ${formatAED(effectiveSaaedShare)} لشركة ساعد (${effectiveSaaedPct.toFixed(2)}%) و${formatAED(effectiveThirdPartyShare)} للطرف الثالث (${effectiveThirdPct.toFixed(2)}%)، إضافة إلى رسوم خدمات بقيمة ${formatAED(effectiveTotalServices)}.`,
+        `توزعت حصص المبالغ المحصلة بواقع ${formatAED(effectiveSaaedShare)} ل${BRAND_CONFIG.companyNameAr} (${effectiveSaaedPct.toFixed(2)}%) و${formatAED(effectiveThirdPartyShare)} للطرف الثالث (${effectiveThirdPct.toFixed(2)}%)، إضافة إلى رسوم خدمات بقيمة ${formatAED(effectiveTotalServices)}.`,
       ]
     : metrics.executivePoints;
 
@@ -260,7 +260,7 @@ export const A4ReportContent: React.FC<A4ReportContentProps> = ({
   const renderOfficialPageFooter = (pageNumber: number) => (
     <footer className="mt-4 flex items-center justify-between border-t border-slate-300 pt-2 text-[10px] font-bold text-slate-600">
       <div className="flex items-center gap-2">
-        <span className="text-[#0A2C52]">شركة ساعد | SAAED</span>
+        <span className="text-[#0A2C52]">{BRAND_CONFIG.bilingualArEn}</span>
         <span className="text-slate-300">|</span>
         <span>إعداد وتصميم: خالد الهاشمي</span>
       </div>
@@ -301,23 +301,23 @@ export const A4ReportContent: React.FC<A4ReportContentProps> = ({
             />
             <div className="relative z-10 min-w-0">
               <div className="truncate text-[11px] font-extrabold tracking-tight text-white">
-                نظام التقرير المالي والتحليل التنفيذي لمزادات المركبات – شركة ساعد
+                {BRAND_CONFIG.systemFullTitleAr}
               </div>
               <div dir="ltr" className="truncate text-[10px] font-semibold text-sky-200">
-                SAAED Executive Auction Financial Report
+                {BRAND_CONFIG.nameEn} Executive Auction Financial Report
               </div>
             </div>
             <div className="relative z-10 flex shrink-0 items-center rounded-md bg-white/95 px-2.5 py-1 shadow-xs">
               {!logoFailed ? (
                 <img
                   src={logoSrc}
-                  alt="شعار شركة ساعد SAAED"
+                  alt={BRAND_CONFIG.logoAlt}
                   referrerPolicy="no-referrer"
                   onError={() => setLogoFailed(true)}
-                  className="h-6 w-auto object-contain"
+                  className="h-6.5 w-auto object-contain"
                 />
               ) : (
-                <span className="text-xs font-extrabold text-[#0A2C52]">SAAED ساعد</span>
+                <span className="text-xs font-extrabold text-[#0A2C52]">{BRAND_CONFIG.compactBilingual}</span>
               )}
             </div>
           </div>
@@ -354,7 +354,7 @@ export const A4ReportContent: React.FC<A4ReportContentProps> = ({
           <div className="print-avoid-break mb-3 flex flex-wrap items-start justify-between gap-2 border-b-2 border-[#0A2C52] pb-2.5">
             <div className="space-y-0.5">
               <h1 className="text-sm font-extrabold text-[#0A2C52] sm:text-[15px]">
-                {snapshotReport?.title || 'التقرير المالي التنفيذي لمزادات المركبات – شركة ساعد'}
+                {snapshotReport?.title || `التقرير المالي التنفيذي لمزادات المركبات – ${BRAND_CONFIG.companyNameAr}`}
               </h1>
               <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-[11px] font-semibold text-slate-600">
                 <span>
@@ -481,7 +481,7 @@ export const A4ReportContent: React.FC<A4ReportContentProps> = ({
           >
             <div className="min-w-0">
               <div className="text-xs font-extrabold text-[#0A2C52]">
-                تابع: التقرير المالي التنفيذي لمزادات المركبات – شركة ساعد
+                تابع: التقرير المالي التنفيذي لمزادات المركبات – {BRAND_CONFIG.companyNameAr}
               </div>
               <div className="text-[10.5px] font-semibold text-slate-600">
                 {periodLabel} · {locationLabel} · {statusMeta.label}
@@ -490,9 +490,9 @@ export const A4ReportContent: React.FC<A4ReportContentProps> = ({
             {!logoFailed && (
               <img
                 src={logoSrc}
-                alt="شعار شركة ساعد SAAED"
+                alt={BRAND_CONFIG.logoAlt}
                 referrerPolicy="no-referrer"
-                className="h-8 w-auto shrink-0 object-contain"
+                className="h-8.5 w-auto shrink-0 object-contain"
               />
             )}
           </div>

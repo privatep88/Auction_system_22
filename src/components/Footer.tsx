@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { PenLine } from 'lucide-react';
 import gavelWatermarkImg from '../assets/images/sidebar_auction_gavel_1794556796342.jpg';
 import vehiclesWatermarkImg from '../assets/images/financial_analytics_seamless_1794567167119.jpg';
-import { assetUrl } from '../utils/uaeDate';
+import { BRAND_CONFIG, getBrandLogoUrl } from '../config/brand';
 import styles from './Footer.module.css';
 
 export const Footer: React.FC = () => {
@@ -10,11 +10,11 @@ export const Footer: React.FC = () => {
   const [gavelFailed, setGavelFailed] = useState(false);
   const [vehiclesFailed, setVehiclesFailed] = useState(false);
 
-  const logoSrc = assetUrl('assets/aistudio/logo_1afd1154.png');
+  const logoSrc = getBrandLogoUrl();
 
   return (
     <footer
-      aria-label="تذييل نظام ساعد لمزادات المركبات"
+      aria-label={`تذييل نظام ${BRAND_CONFIG.nameAr} لمزادات المركبات`}
       className={`no-print ${styles.footerRoot}`}
     >
       {/* Top & Bottom Luminous Corporate Hairlines */}
@@ -132,19 +132,19 @@ export const Footer: React.FC = () => {
         dir="ltr"
         className="relative z-10 flex min-h-[58px] flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 sm:px-6 md:flex-nowrap md:py-1.5"
       >
-        {/* Left Zone: Transparent Official SAAED Logo Directly on Corporate Navy */}
+        {/* Left Zone: Transparent Official SAHER Logo Directly on Corporate Navy */}
         <div className="order-1 flex shrink-0 items-center">
           {!logoFailed ? (
             <img
               src={logoSrc}
-              alt="شعار شركة ساعد SAAED"
+              alt={BRAND_CONFIG.logoAlt}
               referrerPolicy="no-referrer"
               onError={() => setLogoFailed(true)}
-              className="h-9 w-auto max-w-[140px] object-contain drop-shadow-[0_2px_6px_rgba(2,16,38,0.65)] sm:h-10 sm:max-w-[160px]"
+              className="h-10 w-auto max-w-[140px] object-contain brightness-110 contrast-105 drop-shadow-[0_0_5px_rgba(255,255,255,0.8)] drop-shadow-[0_2px_8px_rgba(125,211,252,0.4)] sm:h-11 sm:max-w-[160px]"
             />
           ) : (
             <span className="text-sm font-extrabold tracking-wide text-white">
-              SAAED <span className="text-rose-400">ساعد</span>
+              {BRAND_CONFIG.nameEn} <span className="text-rose-400">{BRAND_CONFIG.nameAr}</span>
             </span>
           )}
         </div>
@@ -158,7 +158,7 @@ export const Footer: React.FC = () => {
               dir="ltr"
               className="text-[11px] font-semibold tracking-[0.015em] text-white/95 drop-shadow-[0_1px_4px_rgba(2,16,38,0.8)] sm:text-xs lg:text-[13px]"
             >
-              SAAED Vehicle Auctions – Financial &amp; Executive Analytics System
+              {BRAND_CONFIG.systemSubtitleEn}
             </span>
             <span aria-hidden="true" className={styles.centerTitleGlowBar} />
           </div>

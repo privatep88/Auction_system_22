@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Archive, FolderArchive, ShieldCheck } from 'lucide-react';
 import archiveBannerImg from '../assets/images/reports_archive_banner_1794566716111.jpg';
-import { assetUrl, formatNumber } from '../utils/uaeDate';
+import { BRAND_CONFIG, getBrandLogoUrl } from '../config/brand';
+import { formatNumber } from '../utils/uaeDate';
 
 interface ReportsArchiveBannerProps {
   reportsCount: number;
@@ -17,7 +18,7 @@ export const ReportsArchiveBanner: React.FC<ReportsArchiveBannerProps> = ({
   const [bannerFailed, setBannerFailed] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
 
-  const logoSrc = assetUrl('assets/aistudio/logo_1afd1154.png');
+  const logoSrc = getBrandLogoUrl();
 
   return (
     <section
@@ -124,10 +125,10 @@ export const ReportsArchiveBanner: React.FC<ReportsArchiveBannerProps> = ({
               <div className="flex h-8.5 shrink-0 items-center justify-center rounded-lg bg-white/95 px-2.5 shadow-sm">
                 <img
                   src={logoSrc}
-                  alt="شعار شركة ساعد SAAED"
+                  alt={BRAND_CONFIG.logoAlt}
                   referrerPolicy="no-referrer"
                   onError={() => setLogoFailed(true)}
-                  className="h-5.5 w-auto object-contain"
+                  className="h-6 w-auto object-contain"
                 />
               </div>
             )}

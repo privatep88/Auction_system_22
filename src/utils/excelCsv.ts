@@ -8,6 +8,7 @@ import {
   ExcelPrintConfigurator,
   ExcelThemeManager,
 } from './saaedExcelEngine';
+import { BRAND_CONFIG } from '../config/brand';
 import { generateSafeId } from './uaeDate';
 
 export interface ParsedVehicleImportRow {
@@ -180,6 +181,7 @@ export async function parseVehiclesSpreadsheet(
           'رسوم النقل ريكفري (AED)',
           'رسوم النقل',
           'ريكفري',
+          'ريكفري ساهر',
           'ريكفري ساعد',
           'recoveryfee',
           'recovery',
@@ -216,7 +218,7 @@ export async function parseVehiclesSpreadsheet(
 
 export async function downloadVehiclesTemplateXlsx(): Promise<void> {
   const wb = new ExcelJS.Workbook();
-  wb.creator = 'شركة ساعد للأنظمة المرورية | SAAED';
+  wb.creator = `${BRAND_CONFIG.companyFullAr} | ${BRAND_CONFIG.nameEn}`;
   const sheet = wb.addWorksheet('المركبات', {
     views: [{ rightToLeft: true, state: 'frozen', ySplit: 1 }],
   });
@@ -284,7 +286,7 @@ export async function downloadVehiclesTemplateXlsx(): Promise<void> {
 
   ExcelLayoutEngine.applyAdaptiveColumnWidths(sheet, 1, 2, headers);
   ExcelPrintConfigurator.configureSheetPrint(sheet, {
-    reportTitle: 'قالب استيراد المركبات القياسي – شركة ساعد',
+    reportTitle: `قالب استيراد المركبات القياسي – ${BRAND_CONFIG.companyNameAr}`,
     orientation: 'landscape',
     headerRowIndex: 1,
     lastRowIndex: 2,
@@ -292,7 +294,7 @@ export async function downloadVehiclesTemplateXlsx(): Promise<void> {
   });
 
   const buffer = await wb.xlsx.writeBuffer();
-  ExcelExportService.triggerBrowserDownload(buffer, 'SAAED_Vehicles_Import_Template.xlsx');
+  ExcelExportService.triggerBrowserDownload(buffer, `${BRAND_CONFIG.nameEn}_Vehicles_Import_Template.xlsx`);
 }
 
 let isExportingVehiclesLock = false;

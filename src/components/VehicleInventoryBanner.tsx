@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import vehicleInventoryBannerImg from '../assets/images/vehicle_inventory_banner_1794564934550.jpg';
-import { assetUrl, formatNumber } from '../utils/uaeDate';
+import { BRAND_CONFIG, getBrandLogoUrl } from '../config/brand';
+import { formatNumber } from '../utils/uaeDate';
 
 interface VehicleInventoryBannerProps {
   displayedCount: number;
@@ -18,7 +19,7 @@ export const VehicleInventoryBanner: React.FC<VehicleInventoryBannerProps> = ({
   const [bannerFailed, setBannerFailed] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
 
-  const logoSrc = assetUrl('assets/aistudio/logo_1afd1154.png');
+  const logoSrc = getBrandLogoUrl();
 
   return (
     <section
@@ -122,10 +123,10 @@ export const VehicleInventoryBanner: React.FC<VehicleInventoryBannerProps> = ({
               <div className="flex h-8.5 shrink-0 items-center justify-center rounded-lg bg-white/95 px-2.5 shadow-sm">
                 <img
                   src={logoSrc}
-                  alt="شعار شركة ساعد SAAED"
+                  alt={BRAND_CONFIG.logoAlt}
                   referrerPolicy="no-referrer"
                   onError={() => setLogoFailed(true)}
-                  className="h-5.5 w-auto object-contain"
+                  className="h-6 w-auto object-contain"
                 />
               </div>
             )}
@@ -134,7 +135,7 @@ export const VehicleInventoryBanner: React.FC<VehicleInventoryBannerProps> = ({
                 معرض وسجل المركبات المعروضة والمبيعة
               </h3>
               <p className="text-[11px] font-semibold tracking-wide text-blue-100/90 sm:text-xs">
-                SAAED Vehicle Inventory · Valuation, Bidding &amp; Settlement Ledger
+                {BRAND_CONFIG.nameEn} Vehicle Inventory · Valuation, Bidding &amp; Settlement Ledger
               </p>
             </div>
           </div>

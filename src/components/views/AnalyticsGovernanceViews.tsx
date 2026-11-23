@@ -69,6 +69,7 @@ import {
   Vehicle,
   WorkspaceMode,
 } from '../../types';
+import { BRAND_CONFIG } from '../../config/brand';
 import { DEMO_PREVIEW_COUNTS } from '../../utils/demoDataGenerator';
 import {
   ARABIC_MONTHS,
@@ -109,7 +110,7 @@ const SERVICE_TYPE_LABELS: Record<ServiceType, string> = {
   platform: 'رسوم المنصة',
   admin: 'الرسوم الإدارية',
   forklift: 'خدمات الفوركلفت',
-  recovery: 'ريكفري ساعد (نقل)',
+  recovery: `ريكفري ${BRAND_CONFIG.nameAr} (نقل)`,
 };
 
 const SERVICE_STATUS_LABELS: Record<
@@ -203,10 +204,10 @@ export const RevenueShareView: React.FC<RevenueShareViewProps> = ({
           </div>
           <div>
             <h2 className="text-base font-extrabold text-[#0A2C52]">
-              توزيع نسب الإيرادات (ساعد / الطرف الثالث)
+              توزيع نسب الإيرادات ({BRAND_CONFIG.nameAr} / الطرف الثالث)
             </h2>
             <p className="text-xs text-slate-600">
-              احتساب حصة شركة ساعد وحصة الطرف الثالث بدقة من المبالغ المحصلة فعلياً لكل مزاد دون ازدواجية
+              احتساب حصة {BRAND_CONFIG.companyNameAr} وحصة الطرف الثالث بدقة من المبالغ المحصلة فعلياً لكل مزاد دون ازدواجية
             </p>
           </div>
         </div>
@@ -271,7 +272,7 @@ export const RevenueShareView: React.FC<RevenueShareViewProps> = ({
                 </span>
                 <span aria-hidden="true">·</span>
                 <span>
-                  حصة ساعد ({metrics.saaedSharePercent.toFixed(2)}%):{' '}
+                  حصة {BRAND_CONFIG.nameAr} ({metrics.saaedSharePercent.toFixed(2)}%):{' '}
                   <strong className="font-mono-num tabular-nums text-[#0B4F93]">
                     {formatAED(metrics.saaedShareAmount)}
                   </strong>
@@ -318,7 +319,7 @@ export const RevenueShareView: React.FC<RevenueShareViewProps> = ({
               centerSecondary="إجمالي محصل المركبات"
               segments={[
                 {
-                  label: `حصة ساعد (${metrics.saaedSharePercent.toFixed(2)}%)`,
+                  label: `حصة ${BRAND_CONFIG.nameAr} (${metrics.saaedSharePercent.toFixed(2)}%)`,
                   value: metrics.saaedShareAmount,
                   color: '#0A569E',
                   sublabel: formatAED(metrics.saaedShareAmount),
@@ -363,7 +364,7 @@ export const RevenueShareView: React.FC<RevenueShareViewProps> = ({
               <div className="rounded-lg border border-blue-200/75 bg-white px-2.5 py-2">
                 <div className="flex items-center gap-1 text-[10.5px] font-bold text-slate-600">
                   <Building2 className="h-3.5 w-3.5 text-[#0B4F93]" />
-                  <span>حصة ساعد</span>
+                  <span>حصة {BRAND_CONFIG.nameAr}</span>
                 </div>
                 <div
                   dir="ltr"
@@ -417,13 +418,13 @@ export const RevenueShareView: React.FC<RevenueShareViewProps> = ({
                 <th className="px-3 py-2.5">
                   <span className="inline-flex items-center gap-1">
                     <Percent className="h-3.5 w-3.5 text-[#0B4F93]" />
-                    <span>نسبة ساعد</span>
+                    <span>نسبة {BRAND_CONFIG.nameAr}</span>
                   </span>
                 </th>
                 <th className="px-3 py-2.5">
                   <span className="inline-flex items-center gap-1.5">
                     <Building2 className="h-3.5 w-3.5 text-[#0B4F93]" />
-                    <span>مستحق ساعد</span>
+                    <span>مستحق {BRAND_CONFIG.nameAr}</span>
                   </span>
                 </th>
                 <th className="px-3 py-2.5">
@@ -610,7 +611,7 @@ export const ServicesFeesView: React.FC<ServicesFeesViewProps> = ({
   const [newAuctionId, setNewAuctionId] = useState(auctions[0]?.id || '');
   const [newVehicleId, setNewVehicleId] = useState('');
   const [newAmount, setNewAmount] = useState(200);
-  const [newBeneficiary, setNewBeneficiary] = useState('شركة ساعد للأنظمة المرورية');
+  const [newBeneficiary, setNewBeneficiary] = useState<string>(BRAND_CONFIG.companyFullAr);
   const [newRefNo, setNewRefNo] = useState('');
   const [newDate, setNewDate] = useState(uaeNow.isoDate);
   const [submitting, setSubmitting] = useState(false);
@@ -671,7 +672,7 @@ export const ServicesFeesView: React.FC<ServicesFeesViewProps> = ({
         collectedAmount: newAmount,
         collectionStatus: 'collected',
         referenceNo: newRefNo.trim() || `REF-${Date.now().toString().slice(-5)}`,
-        beneficiary: newBeneficiary.trim() || 'شركة ساعد للأنظمة المرورية',
+        beneficiary: newBeneficiary.trim() || BRAND_CONFIG.companyFullAr,
         year: yr,
         month: mo,
         location: targetVehicle?.location || targetAuction?.location || 'ساحة الحجز – مصفح',
@@ -754,7 +755,7 @@ export const ServicesFeesView: React.FC<ServicesFeesViewProps> = ({
               رسوم المنصة والخدمات الإضافية
             </h2>
             <p className="text-xs text-slate-600">
-              تفصيل رسوم المنصة، والرسوم الإدارية بعد البيع، وخدمات الفوركلفت، ونقل المركبات (ريكفري ساعد)
+              تفصيل رسوم المنصة، والرسوم الإدارية بعد البيع، وخدمات الفوركلفت، ونقل المركبات (ريكفري {BRAND_CONFIG.nameAr})
             </p>
           </div>
         </div>
@@ -1016,7 +1017,7 @@ export const ServicesFeesView: React.FC<ServicesFeesViewProps> = ({
                 <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-red-200 bg-red-50 text-[#C8232C]">
                   <Truck className="h-3.5 w-3.5" />
                 </span>
-                <span className="leading-snug">نقل المركبات (ريكفري ساعد)</span>
+                <span className="leading-snug">نقل المركبات (ريكفري {BRAND_CONFIG.nameAr})</span>
               </div>
               <div
                 dir="ltr"
@@ -1072,7 +1073,7 @@ export const ServicesFeesView: React.FC<ServicesFeesViewProps> = ({
                   ['platform', 'المنصة', Monitor],
                   ['admin', 'الإدارية', FileText],
                   ['forklift', 'الفوركلفت', Forklift],
-                  ['recovery', 'ريكفري ساعد', Truck],
+                  ['recovery', `ريكفري ${BRAND_CONFIG.nameAr}`, Truck],
                 ] as const
               ).map(([k, label, IconComp]) => (
                 <button
@@ -1325,7 +1326,7 @@ export const ServicesFeesView: React.FC<ServicesFeesViewProps> = ({
                 <th className="px-3 py-2.5">
                   <span className="inline-flex items-center gap-1">
                     <Truck className="h-3.5 w-3.5 text-rose-300" />
-                    <span>ريكفري ساعد</span>
+                    <span>ريكفري {BRAND_CONFIG.nameAr}</span>
                   </span>
                 </th>
                 <th className="px-3 py-2.5">
@@ -1504,7 +1505,7 @@ export const FinancialAnalysisView: React.FC<FinancialAnalysisViewProps> = ({
       key: 'service-fees',
       name: 'إجمالي رسوم الخدمات',
       value: formatAED(metrics.totalServiceFees),
-      note: 'المنصة + الإدارية + الفوركلفت + ريكفري ساعد',
+      note: `المنصة + الإدارية + الفوركلفت + ريكفري ${BRAND_CONFIG.nameAr}`,
       icon: Layers,
       iconBadgeCls: 'border-teal-200 bg-teal-50 text-teal-700',
       borderTopCls: 'border-t-teal-600',
@@ -1514,7 +1515,7 @@ export const FinancialAnalysisView: React.FC<FinancialAnalysisViewProps> = ({
     },
     {
       key: 'saaed-share',
-      name: 'حصة ساعد من المحصل',
+      name: `حصة ${BRAND_CONFIG.nameAr} من المحصل`,
       value: formatAED(metrics.saaedShareAmount),
       note: `${metrics.saaedSharePercent.toFixed(2)}% من المبالغ المحصلة`,
       icon: Handshake,
@@ -2538,7 +2539,7 @@ export const SettingsPermissionsView: React.FC<SettingsPermissionsViewProps> = (
       showToast({
         variant: 'success',
         title: 'تم حفظ الإعدادات المالية بنجاح',
-        description: `توزيع الحصص: ${saaedPct}% ساعد / ${thirdPct}% طرف ثالث`,
+        description: `توزيع الحصص: ${saaedPct}% ${BRAND_CONFIG.nameAr} / ${thirdPct}% طرف ثالث`,
       });
     } catch (err) {
       showError({
@@ -2797,7 +2798,7 @@ export const SettingsPermissionsView: React.FC<SettingsPermissionsViewProps> = (
             <div>• إجمالي البيع: <strong className="font-mono-num">{formatAED(DEMO_PREVIEW_COUNTS.novemberTotalSale)}</strong></div>
             <div>• التحصيل الفعلي: <strong className="font-mono-num">{formatAED(DEMO_PREVIEW_COUNTS.novemberTotalCollected)}</strong></div>
             <div>• الرصيد المتبقي: <strong className="font-mono-num">{formatAED(DEMO_PREVIEW_COUNTS.novemberOutstanding)}</strong></div>
-            <div>• حصة ساعد (70%): <strong className="font-mono-num">{formatAED(DEMO_PREVIEW_COUNTS.novemberSaaedShare)}</strong></div>
+            <div>• حصة {BRAND_CONFIG.nameAr} (70%): <strong className="font-mono-num">{formatAED(DEMO_PREVIEW_COUNTS.novemberSaaedShare)}</strong></div>
             <div>• إجمالي الخدمات: <strong className="font-mono-num">{formatAED(DEMO_PREVIEW_COUNTS.novemberTotalServices)}</strong></div>
           </div>
         </ConfirmDialog>
@@ -2951,7 +2952,7 @@ export const SettingsPermissionsView: React.FC<SettingsPermissionsViewProps> = (
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="mb-1 block font-bold text-slate-700">نسبة شركة ساعد الافتراضية (%)</label>
+              <label className="mb-1 block font-bold text-slate-700">نسبة {BRAND_CONFIG.companyNameAr} الافتراضية (%)</label>
               <input
                 type="number"
                 min={0}
@@ -3019,7 +3020,7 @@ export const SettingsPermissionsView: React.FC<SettingsPermissionsViewProps> = (
               />
             </div>
             <div>
-              <label className="mb-1 block font-bold text-slate-700">رسوم ريكفري ساعد الافتراضية (AED)</label>
+              <label className="mb-1 block font-bold text-slate-700">رسوم ريكفري {BRAND_CONFIG.nameAr} الافتراضية (AED)</label>
               <input
                 type="number"
                 min={0}

@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
 import sidebarBottomFacilityImg from '../assets/images/sidebar_facility_uae_flag_1794568835315.jpg';
-import { assetUrl } from '../utils/uaeDate';
+import { getBrandLogoUrl } from '../config/brand';
 
 /**
  * Clean, adaptive institutional backdrop for the right sidebar.
- * Strictly follows SAAED_Dashboard_with_UAE_Office_Facade reference:
  *   1. Deep navy-to-royal-blue seamless vertical gradient
- *   2. Luminous cyan upper curves + calm open center featuring ONLY the Official SAAED Logo Watermark (15% opacity)
- *   3. Bottom integrated architectural scene: SAAED facility + Official SAAED Logo on fascia + UAE National Flag on roofline flagpole + symmetrical vehicle rows + luminous cyan bottom waves
- *
- * Middle column contains ZERO standalone flags, gavels, or duplicate vehicle layers.
+ *   2. Luminous cyan upper curves + calm open center featuring ONLY the Official SAHER Logo Watermark (15% opacity)
+ *   3. Bottom integrated architectural scene: SAHER facility + Official SAHER Logo on fascia + UAE National Flag on roofline flagpole + symmetrical vehicle rows + luminous cyan bottom waves
  */
 export const SidebarDecorativeBackground: React.FC = () => {
   const [bottomFailed, setBottomFailed] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
 
-  const logoSrc = assetUrl('assets/aistudio/logo_1afd1154.png');
+  const logoSrc = getBrandLogoUrl();
 
   return (
     <div
@@ -126,7 +123,7 @@ export const SidebarDecorativeBackground: React.FC = () => {
             }}
           />
 
-          {/* Official Authentic SAAED Logo Composited Directly on the Building's White Fascia */}
+          {/* Official Authentic SAHER Logo Composited Directly on the Building's White Fascia */}
           {!bottomFailed && !logoFailed && (
             <div className="absolute left-[50%] top-[42.7%] -translate-x-1/2 -translate-y-1/2">
               <img
@@ -134,7 +131,7 @@ export const SidebarDecorativeBackground: React.FC = () => {
                 alt=""
                 referrerPolicy="no-referrer"
                 onError={() => setLogoFailed(true)}
-                className="h-auto w-[96px] max-w-full object-contain opacity-[0.96] drop-shadow-[0_1px_2px_rgba(4,24,56,0.2)]"
+                className="h-auto w-[86px] max-w-full object-contain opacity-[0.97] drop-shadow-[0_1px_2px_rgba(4,24,56,0.2)]"
               />
             </div>
           )}

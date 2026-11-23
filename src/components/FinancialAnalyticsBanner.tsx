@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { BarChart3, Gauge, TrendingUp } from 'lucide-react';
 import analyticsBannerImg from '../assets/images/financial_analytics_seamless_1794567167119.jpg';
-import { assetUrl, formatPercent } from '../utils/uaeDate';
+import { BRAND_CONFIG, getBrandLogoUrl } from '../config/brand';
+import { formatPercent } from '../utils/uaeDate';
 import styles from './SaaedBanner.module.css';
 
 interface FinancialAnalyticsBannerProps {
@@ -18,7 +19,7 @@ export const FinancialAnalyticsBanner: React.FC<FinancialAnalyticsBannerProps> =
   const [bannerFailed, setBannerFailed] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
 
-  const logoSrc = assetUrl('assets/aistudio/logo_1afd1154.png');
+  const logoSrc = getBrandLogoUrl();
 
   return (
     <section
@@ -110,7 +111,7 @@ export const FinancialAnalyticsBanner: React.FC<FinancialAnalyticsBannerProps> =
               <div className={styles.logoPlate}>
                 <img
                   src={logoSrc}
-                  alt="شعار شركة ساعد SAAED"
+                  alt={BRAND_CONFIG.logoAlt}
                   referrerPolicy="no-referrer"
                   onError={() => setLogoFailed(true)}
                   className={styles.logoImg}
@@ -122,7 +123,7 @@ export const FinancialAnalyticsBanner: React.FC<FinancialAnalyticsBannerProps> =
                 لوحة التحليل المالي التنفيذي ومؤشرات الأداء
               </h3>
               <p className={styles.englishSubtitle}>
-                SAAED Executive Financial Analytics &amp; Auction Performance KPIs
+                {BRAND_CONFIG.nameEn} Executive Financial Analytics &amp; Auction Performance KPIs
               </p>
             </div>
           </div>
